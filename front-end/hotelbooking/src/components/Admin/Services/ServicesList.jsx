@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 import { deleteService } from '../../../services/index';
-
-import { Card, Table, ButtonGroup, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { Card, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import MyToast from '../MyToast';
 import axios from 'axios';
-import { BsFillTrashFill, BsPencilSquare, BsSearch, BsFillXCircleFill, BsList, BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft } from "react-icons/bs";
+import { BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft } from "react-icons/bs";
 
-class PolicyList extends Component {
+class ServicesList extends Component {
 
     constructor(props) {
         super(props);
@@ -19,7 +17,6 @@ class PolicyList extends Component {
             currentPage: 1,
             policiesPerPage: 5,
             sortDir: "asc",
-            // listServices:[],
         };
     }
 
@@ -32,7 +29,7 @@ class PolicyList extends Component {
 
     componentDidMount() {
         this.findAllServices(this.state.currentPage);
-        console.log(this.props.match.params.type);
+        // console.log(this.props.match.params.type);
         // const typeParam = this.props.match.params.type;
         // if(this.props.match.params.type==="all"){
         //     this.setState({
@@ -153,7 +150,7 @@ class PolicyList extends Component {
     };
 
     add = () => {
-        return this.props.history.push("/admin/addpolicy");
+        return this.props.history.push("/admin/addservices");
     };
 
     checkService = (Code) => {
@@ -174,7 +171,7 @@ class PolicyList extends Component {
 
     render() {
         const { services, currentPage, totalPages, search } = this.state;
-        const typeParam = this.props.match.params.type;
+        // const typeParam = this.props.match.params.type;
         return (
             <div>
                 <div className="home">
@@ -218,7 +215,8 @@ class PolicyList extends Component {
                                                             <tr align="center">
                                                                 <td colSpan="3">No Policies Available.</td>
                                                             </tr> :
-                                                            services.filter(item => item.type === typeParam).map((service) => (
+                                                            // services.filter(item => item.type === typeParam).map((service) => (
+                                                                services.map((service) => (
                                                                 <tr key={service.id}>
                                                                     <td>{service.title}</td>
                                                                     <td>{service.type}</td>
@@ -301,4 +299,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PolicyList);
+export default connect(mapStateToProps, mapDispatchToProps)(ServicesList);

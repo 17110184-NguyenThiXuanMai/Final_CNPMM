@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { BsFillHouseFill, BsLockFill} from "react-icons/bs";
+import { BsFillHouseFill, BsLockFill } from "react-icons/bs";
 import { BiRestaurant } from "react-icons/bi";
 
 export default class Sidebar extends Component {
@@ -16,10 +16,10 @@ export default class Sidebar extends Component {
         <ul className="sidebar-menu do-nicescrol">
           <li className="sidebar-header">MAIN NAVIGATION</li>
           <li>
-        <Link to="/admin">
-          <i class="zmdi zmdi-view-dashboard"></i> <span> Dashboard </span>
-        </Link>
-      </li>
+            <Link to="/admin">
+              <i className="zmdi zmdi-view-dashboard"></i> <span> Dashboard </span>
+            </Link>
+          </li>
           <li>
             <Link to="/admin/roomtypes">
               <BsFillHouseFill /> &nbsp;
@@ -57,12 +57,12 @@ export default class Sidebar extends Component {
           </li>
           <li>
             <Link to="/admin/userlist">
-            <i className="zmdi zmdi-face"></i>
+              <i className="zmdi zmdi-face"></i>
               <span> User List </span>
             </Link>
           </li>
           <li>
-            <Link to="/admin/policy/type=Services">
+            <Link to="/admin/serviceslist">
               <i className="zmdi zmdi-format-list-bulleted"></i>
               <span> Service </span>
             </Link>

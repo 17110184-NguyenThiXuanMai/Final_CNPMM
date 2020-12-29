@@ -7,7 +7,6 @@ import HomePage from './HomePage/HomePage'
 import Footer from '../components/HomePage/Footer'
 import { Provider } from 'react-redux';
 import store from '../services/store';
-// import RoomDetail from './HomePage/RoomDetail'
 import Profile from './HomePage/Profile/Profile'
 import Rooms from './HomePage/Room/Rooms'
 import Booknow from './HomePage/Booknow/Booknow'
@@ -30,17 +29,15 @@ export default class DefaultLayout extends Component {
                         <div id="wrapper">
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/signup" component={Register} />
-                            <Route exact path="/profile" component={Profile} /> 
-                            <Provider store={store}>  
-                            {/* <Route exact path="/rooms/:id" component={RoomDetail} />  */}
-                            <Route exact path="/rooms/" component={Rooms} />  
-                            <Route exact path="/rooms/:id" component={SingleRoom} />   
-                            <PrivateRoute exact path="/booknow/:id" component={RestaurantContainer} />     
-                            <Route exact path="/review/" component={Blog} />   
-                            <Route exact path="/contact/" component={Contact} />  
-                            <Route exact path="/about/" component={AboutUs} />  
-                            {/* <Route component={Error} /> */}
-                             </Provider> 
+                            <Route exact path="/profile" component={Profile} />
+                            <Provider store={store}>
+                                <Route exact path="/rooms/" component={Rooms} />
+                                <Route exact path="/rooms/:id" component={SingleRoom} />
+                                <PrivateRoute exact path="/booknow/:id" component={RestaurantContainer} />
+                                <Route exact path="/review/" component={Blog} />
+                                <Route exact path="/contact/" component={Contact} />
+                                <Route exact path="/about/" component={AboutUs} />
+                            </Provider>
                         </div>
                     </body>
                     {/* <Route component={Error} /> */}

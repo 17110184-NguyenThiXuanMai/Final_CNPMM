@@ -1,19 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-// import {BrowserRouter as Router } from 'react-router-dom'
 import App from './App';
-// import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
-import {RoomProvider} from './context'
+import { RoomProvider } from './context'
 import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
   <RoomProvider>
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-</RoomProvider>,
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </RoomProvider>,
   document.getElementById('root')
 );
 

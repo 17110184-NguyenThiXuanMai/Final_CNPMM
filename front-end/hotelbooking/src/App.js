@@ -7,7 +7,6 @@ import PrivateRoute from './PrivateRoute';
 function App() {
   return (
     <Switch>
-      {/* <Route path='/admin' component={adminDefaultLayout} /> */}
       <PrivateRoute path='/admin' component={adminDefaultLayout} />
       <Route path='/' component={DefaultLayout} />
     </Switch>

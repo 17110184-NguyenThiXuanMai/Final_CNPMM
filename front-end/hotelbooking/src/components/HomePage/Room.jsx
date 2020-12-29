@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 import { deleteRoomType } from '../../services/index';
-
 import './../../css/Style.css';
 import {Image} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -32,14 +30,6 @@ class Room extends Component {
         this.findAllRoomTypes(this.state.currentPage);
     }
 
-    /*findAllBooks() {
-        fetch("http://localhost:8080/rest/books")
-            .then(response => response.json())
-            .then((data) => {
-                this.setState({books: data});
-            });
-    };*/
-
     findAllRoomTypes(currentPage) {
         currentPage -= 1;
         axios.get("http://localhost:8080/api/test/roomtypes?pageNumber=" + currentPage + "&pageSize=" + this.state.roomTypesPerPage + "&sortBy=price&sortDir=" + this.state.sortDir)
@@ -54,24 +44,6 @@ class Room extends Component {
             });
     };
 
-    /*deleteBook = (bookId) => {
-        fetch("http://localhost:8080/rest/books/"+bookId, {
-            method: 'DELETE'
-        })
-        .then(response => response.json())
-        .then((book) => {
-            if(book) {
-                this.setState({"show":true});
-                setTimeout(() => this.setState({"show":false}), 3000);
-                this.setState({
-                    books: this.state.books.filter(book => book.id !== bookId)
-                });
-            } else {
-                this.setState({"show":false});
-            }
-        });
-    };*/
-
     deleteRoomType = (roomTypeId) => {
         this.props.deleteRoomType(roomTypeId);
         setTimeout(() => {
@@ -83,18 +55,6 @@ class Room extends Component {
                 this.setState({ "show": false });
             }
         }, 1000);
-        /*axios.delete("http://localhost:8080/rest/books/"+bookId)
-            .then(response => {
-                if(response.data != null) {
-                    this.setState({"show":true});
-                    setTimeout(() => this.setState({"show":false}), 3000);
-                    this.setState({
-                        books: this.state.books.filter(book => book.id !== bookId)
-                    });
-                } else {
-                    this.setState({"show":false});
-                }
-            });*/
     };
 
     searchData = (currentPage) => {
@@ -113,7 +73,6 @@ class Room extends Component {
 
     render() {
         const { roomTypes } = this.state;
-
         return (
             roomTypes.map((roomType) => (
                 <article className="room">

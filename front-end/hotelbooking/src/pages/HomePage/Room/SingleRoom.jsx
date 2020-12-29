@@ -1,48 +1,39 @@
-import React, {Component } from 'react';
-
-import {connect} from 'react-redux';
-import {saveRoomType, fetchRoomType, updateRoomType} from '../../../services/index';
-
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { saveRoomType, fetchRoomType, updateRoomType } from '../../../services/index';
 import Banner from '../../../components/HomePage/Banner';
 import defaultBcg from '../../../images/room-1.jpeg'
-import {Link} from 'react-router-dom'
-import {RoomContext} from '../../../context'
+import { Link } from 'react-router-dom'
+import { RoomContext } from '../../../context'
 import StyledHero from '../../../components/HomePage/StyledHero';
 import axios from 'axios';
 import '../../../css/main.css'
-import { Image} from 'react-bootstrap';
-import Booking from '../../../components/HomePage/Booking/Booking';
-import Gallery from '../../../components/HomePage/Gallery/Gallery';
 
 class SingleRoom extends Component {
     constructor(props) {
         super(props);
         this.state = this.initialState;
         this.state = {
-            // genres: [],
-            // languages : [],
             roomTypes: [],
             type: [],
-            show : false,
+            show: false,
             defaultBcg
         };
         this.roomTypeChange = this.roomTypeChange.bind(this);
         this.submitRoomType = this.submitRoomType.bind(this);
-    }  
+    }
 
     initialState = {
-        id:'', titleRoomType:'', slug:'',type:'',size:'',amount:'', capacity:'',pets:'',breakfast:'',television:'', bath:'',description:'', coverPhotoURL:'', price:''
+        id: '', titleRoomType: '', slug: '', type: '', size: '', amount: '', capacity: '', pets: '', breakfast: '', television: '', bath: '', description: '', coverPhotoURL: '', price: ''
     };
     static contextType = RoomContext;
 
     componentDidMount() {
         const roomTypeId = +this.props.match.params.id;
-        if(roomTypeId) {
+        if (roomTypeId) {
             this.findRoomTypeById(roomTypeId);
         }
         this.findAllTypes();
-        // this.findAllLanguages();
-        // this.findAllGenres();
     }
 
     findAllTypes = () => {
@@ -50,32 +41,19 @@ class SingleRoom extends Component {
             .then(response => response.data)
             .then((data) => {
                 this.setState({
-                    types: [{value:'', display:'Select Type'}]
+                    types: [{ value: '', display: 'Select Type' }]
                         .concat(data.map(type => {
-                            return {value:type, display:type}
+                            return { value: type, display: type }
                         }))
                 });
             });
     };
 
-    // findAllGenres = () => {
-    //     axios.get("http://localhost:8080/api/test/books/genres")
-    //         .then(response => response.data)
-    //         .then((data) => {
-    //             this.setState({
-    //                 genres: [{value:'', display:'Select Genre'}]
-    //                     .concat(data.map(genre => {
-    //                         return {value:genre, display:genre}
-    //                     }))
-    //             });
-    //         });
-    // };
-
     findRoomTypeById = (roomTypeId) => {
         this.props.fetchRoomType(roomTypeId);
         setTimeout(() => {
             let roomType = this.props.roomTypeObject.roomType;
-            if(roomType != null) {
+            if (roomType != null) {
                 this.setState({
                     id: roomType.id,
                     titleRoomType: roomType.titleRoomType,
@@ -100,10 +78,8 @@ class SingleRoom extends Component {
         this.setState(() => this.initialState);
     };
 
-
     submitRoomType = event => {
         event.preventDefault();
-
         const roomType = {
             titleRoomType: this.state.titleRoomType,
             slug: this.state.slug,
@@ -119,14 +95,13 @@ class SingleRoom extends Component {
             description: this.state.description,
             coverPhotoURL: this.state.coverPhotoURL
         };
-
         this.props.saveRoomType(roomType);
         setTimeout(() => {
-            if(this.props.savedRoomTypeObject.roomType != null) {
-                this.setState({"show":true, "method":"post"});
-                setTimeout(() => this.setState({"show":false}), 3000);
+            if (this.props.savedRoomTypeObject.roomType != null) {
+                this.setState({ "show": true, "method": "post" });
+                setTimeout(() => this.setState({ "show": false }), 3000);
             } else {
-                this.setState({"show":false});
+                this.setState({ "show": false });
             }
         }, 2000);
 
@@ -135,7 +110,6 @@ class SingleRoom extends Component {
 
     updateRoomType = event => {
         event.preventDefault();
-
         const roomType = {
             titleRoomType: this.state.titleRoomType,
             slug: this.state.slug,
@@ -153,19 +127,19 @@ class SingleRoom extends Component {
         };
         this.props.updateRoomType(roomType);
         setTimeout(() => {
-            if(this.props.updatedRoomTypeObject.roomType != null) {
-                this.setState({"show":true, "method":"put"});
-                setTimeout(() => this.setState({"show":false}), 3000);
+            if (this.props.updatedRoomTypeObject.roomType != null) {
+                this.setState({ "show": true, "method": "put" });
+                setTimeout(() => this.setState({ "show": false }), 3000);
             } else {
-                this.setState({"show":false});
+                this.setState({ "show": false });
             }
-        }, 2000);     
+        }, 2000);
         this.setState(this.initialState);
     };
 
     roomTypeChange = event => {
         this.setState({
-            [event.target.name]:event.target.value
+            [event.target.name]: event.target.value
         });
     };
 
@@ -174,41 +148,23 @@ class SingleRoom extends Component {
     };
     static contextType = RoomContext;
     render() {
-        // const { getRoom } = this.context;
-        // const room = getRoom(this.state.id);
-        // if(!room){
-        //     return (<div className="container roomerror">
-        //             <div className="row my-5">
-        //                 <div className="col-md-6 col-12 mx-auto">
-        //                     <div className="card shadow-lg border-0 p-4 error">
-        //                         <h1 className="text-center display-4">SORRY</h1>
-        //                         <h3>No such room could be found...</h3>
-        //                         <Link to="/rooms" className="btn btn-warning mt-4 ">Back to Rooms</Link>
-        //                     </div> 
-        //                 </div>
-        //             </div>
-        //         </div>);
-        // }
-        // const {images} = room;
-        // const [mainImg, ...defaultBcg] = images;
-        // const { roomTypes} = this.state;
         return (
             <div>
-                  <StyledHero img={this.state.coverPhotoURL}>
-                     <Banner title={`${this.state.titleRoomType} room`}>
-                         <Link to="/rooms" className="btn-primary">
-                             back to rooms
-                         </Link> 
-                     </Banner>
-                 </StyledHero>
-                 <section className="single-room">
-                     {/* <div className="single-room-images">
+                <StyledHero img={this.state.coverPhotoURL}>
+                    <Banner title={`${this.state.titleRoomType} room`}>
+                        <Link to="/rooms" className="btn-primary">
+                            back to rooms
+                         </Link>
+                    </Banner>
+                </StyledHero>
+                <section className="single-room">
+                    {/* <div className="single-room-images">
                          {defaultImg.map((item, index) => {
                             return <img key={index} src={item} alt={this.state.title} />;
                         })}
                     </div> */}
-                    
-                        {/* {roomTypes.map((roomType) => {
+
+                    {/* {roomTypes.map((roomType) => {
                             return (
                             <div className="col-md-4 col-12 mx-auto" key={roomType.id}>
                                 <div className="card border-0 shadow-lg">
@@ -217,11 +173,10 @@ class SingleRoom extends Component {
                                 </div>
                             </div>)
                         })} */}
-                       {/* <img src={this.state.coverPhotoURL} />
+                    {/* <img src={this.state.coverPhotoURL} />
                        <img src={this.state.coverPhotoURL} />
                        <img src={this.state.coverPhotoURL} /> */}
-                     
-                
+
                     <div className="single-room-info">
                         <article className="desc">
                             <h3>details</h3>
@@ -235,30 +190,30 @@ class SingleRoom extends Component {
                             <h6>Type: {this.state.type} </h6>
                             <h6>
                                 max capacity : {
-                                    this.state.capacity > 1 ? `${this.state.capacity} people` : 
-                                    `${this.state.capacity} person `}
+                                    this.state.capacity > 1 ? `${this.state.capacity} people` :
+                                        `${this.state.capacity} person `}
                             </h6>
-                                <h6> {this.state.pets? "pets allowed":"no pets allowed"}</h6>
-                                <h6>{this.state.breakfast && "free breakfast included"}</h6>
-                                <h6>{this.state.television? "have television" : "have not television"}</h6>
-                                <h6>{this.state.bath? "have bath" : "have not bath"}</h6>
+                            <h6> {this.state.pets ? "pets allowed" : "no pets allowed"}</h6>
+                            <h6>{this.state.breakfast && "free breakfast included"}</h6>
+                            <h6>{this.state.television ? "have television" : "have not television"}</h6>
+                            <h6>{this.state.bath ? "have bath" : "have not bath"}</h6>
                         </article>
                     </div>
                 </section>
                 <section className="room-extras">
-                     {/* <h3>Extras</h3>
+                    {/* <h3>Extras</h3>
                      <ul className="extras">
                          {extras.map((item, index) => {
                             return <li key={index}>- {item}</li>
                         })}
                     </ul> */}
                     <div className="p-4 clearfix">
-                    <div className="row">
-                       <div className="col-md-3 col-12 ml-auto">
-                          <Link to={`/booknow/${this.state.id}`} className="btn btn-outline-primary btn-block btn-lg float-right ">Book Now</Link>
-                       </div>
+                        <div className="row">
+                            <div className="col-md-3 col-12 ml-auto">
+                                <Link to={`/booknow/${this.state.id}`} className="btn btn-outline-primary btn-block btn-lg float-right ">Book Now</Link>
+                            </div>
+                        </div>
                     </div>
-                </div>
                 </section>
             </div>
         );

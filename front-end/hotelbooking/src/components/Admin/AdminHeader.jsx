@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import AuthService from "../../services/Login/auth.service";
-import { BsFillHouseFill, BsLockFill} from "react-icons/bs";
+import { BsFillHouseFill, BsLockFill } from "react-icons/bs";
 
 export default class AdminHeader extends Component {
   state = {
@@ -34,7 +34,7 @@ export default class AdminHeader extends Component {
   logOut() {
     AuthService.logout();
   }
-  
+
   render() {
     const { currentUser } = this.state;
     return (
@@ -104,8 +104,8 @@ export default class AdminHeader extends Component {
                         <div className="media">
                           <div className="avatar"><img className="align-self-start mr-3" src="https://via.placeholder.com/110x110" alt="user avatar" /></div>
                           <div className="media-body">
-                            <h6 className="mt-2 user-title">  
-                            <Link to={"/login"}>Login</Link>
+                            <h6 className="mt-2 user-title">
+                              <Link to={"/login"}>Login</Link>
                             </h6>
                             {/* <p className="user-subtitle">mccoy@example.com</p> */}
                           </div>
@@ -113,7 +113,7 @@ export default class AdminHeader extends Component {
                       </a>
                     </li>
                     <li className="dropdown-divider"></li>
-                    <li className="dropdown-item"><i className="icon-envelope mr-2"></i> 
+                    <li className="dropdown-item"><i className="icon-envelope mr-2"></i>
                       <a href="/login" onClick={this.logOut}>
                         LogOut
                       </a></li>

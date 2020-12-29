@@ -4,7 +4,6 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import './register.css';
-
 import AuthService from "../../../services/Login/auth.service";
 
 const required = value => {
@@ -54,7 +53,6 @@ export default class Register extends Component {
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
-
     this.state = {
       username: "",
       email: "",
@@ -84,14 +82,12 @@ export default class Register extends Component {
 
   handleRegister(e) {
     e.preventDefault();
-
     this.setState({
       message: "",
       successful: false
     });
 
     this.form.validateAll();
-
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.register(
         this.state.username,
@@ -124,87 +120,47 @@ export default class Register extends Component {
   render() {
     return (
       <div className="page-wrapper bg-gra-01 p-t-180 p-b-100 font-poppins">
-      <div className="wrapper wrapper--w780">
-        <div className="card-4 card-3">
-        <div className="card-heading"></div>
-        <div className="card-body">
-          <h2 className="title">Registration Info</h2>
-          <Form 
-            onSubmit={this.handleRegister}
-            ref={c => {
-              this.form = c;
-            }}
-          >
-            {!this.state.successful && (
-              <div>
-                <div className="input-group2">
-                  <Input
-                    type="text"
-                    className="input--style-3"
-                    name="username"
-                    placeholder="Username"
-                    value={this.state.username}
-                    onChange={this.onChangeUsername}
-                    validations={[required, vusername]}
-                  />
-                </div>
-
-                <div className="input-group2">  
-                  <Input
-                    type="text"
-                    className="input--style-3"
-                    name="email"
-                    placeholder="Email"
-                    value={this.state.email}
-                    onChange={this.onChangeEmail}
-                    validations={[required, email]}
-                  />
-                </div>
-
-                <div className="input-group2">
-                  <Input
-                    type="password"
-                    className="input--style-3"
-                    placeholder="Password"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChangePassword}
-                    validations={[required, vpassword]}
-                  />
-                </div>
-
-                <div className="p-t-10">
-                  <button className="btn btn--pill btn--green">Sign Up</button>
-                </div>
-              </div>
-            )}
-
-            {this.state.message && (
-              <div className="input-group2">
-                <div className="input--style-3">
-                <div
-                  className={
-                    this.state.successful
-                      ? "alert alert-success"
-                      : "alert alert-danger"
-                  }
-                  role="alert"
-                >
-                  {this.state.message}
-                </div>
-              </div>
-              </div>
-            )}
-            <CheckButton
-              style={{ display: "none" }}
-              ref={c => {
-                this.checkBtn = c;
-              }}
-            />
-          </Form>
+        <div className="wrapper wrapper--w780">
+          <div className="card-4 card-3">
+            <div className="card-heading"></div>
+            <div className="card-body">
+              <h2 className="title">Registration Info</h2>
+              <Form onSubmit={this.handleRegister} ref={c => { this.form = c; }} >
+                {!this.state.successful && (
+                  <div>
+                    <div className="input-group2">
+                      <Input type="text" className="input--style-3" name="username" placeholder="Username" value={this.state.username} onChange={this.onChangeUsername} validations={[required, vusername]} />
+                    </div>
+                    <div className="input-group2">
+                      <Input type="text" className="input--style-3" name="email" placeholder="Email" value={this.state.email} onChange={this.onChangeEmail} validations={[required, email]}/>
+                    </div>
+                    <div className="input-group2">
+                      <Input type="password" className="input--style-3" placeholder="Password" name="password" value={this.state.password} onChange={this.onChangePassword} validations={[required, vpassword]} />
+                    </div>
+                    <div className="p-t-10">
+                      <button className="btn btn--pill btn--green">Sign Up</button>
+                    </div>
+                  </div>
+                )}
+                {this.state.message && (
+                  <div className="input-group2">
+                    <div className="input--style-3">
+                      <div
+                        className={ this.state.successful
+                            ? "alert alert-success"
+                            : "alert alert-danger"
+                        }
+                        role="alert" >
+                        {this.state.message}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <CheckButton style={{ display: "none" }} ref={c => { this.checkBtn = c; }} />
+              </Form>
+            </div>
           </div>
         </div>
-      </div>
       </div>
     );
   }

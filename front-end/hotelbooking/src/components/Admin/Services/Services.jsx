@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 import { saveService, fetchService, updateService } from '../../../services/index';
-import { Card, Form, Button, Col, Row } from 'react-bootstrap';
+import { Card, Form, Col} from 'react-bootstrap';
 import MyToast from '../MyToast';
 import axios from 'axios';
 import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill, BsFillCaretDownFill } from "react-icons/bs";
 
-class Policy extends Component {
+class Services extends Component {
     constructor(props) {
         super(props);
         this.state = this.initialState;
@@ -116,7 +115,6 @@ class Policy extends Component {
             type: this.state.type,
             description: this.state.description,
         };
-
         this.props.saveService(service);
         setTimeout(() => {
             if (!!this.props.savedServiceObject.service) {
@@ -127,13 +125,14 @@ class Policy extends Component {
             }
         }, 2000);
         this.setState(this.initialState);
-        this.props.history.push(`/admin/policy/type=${this.state.type}`)
+       // this.props.history.push(`/admin/policy/type=${this.state.type}`)
     };
 
     updateService = event => {
         event.preventDefault();
 
         const service = {
+            id: this.state.id,
             title: this.state.title,
             type: this.state.type,
             description: this.state.description,
@@ -154,13 +153,13 @@ class Policy extends Component {
     serviceChange = event => {
         this.setState({
             [event.target.name]: event.target.value
-
         });
     };
 
     serviceList = () => {
-        return this.props.history.push(`/admin/policy/type=${this.state.type}`);
+        // return this.props.history.push(`/admin/policy/type=${this.state.type}`);
         //  console.log(this.state.type);
+        return this.props.history.push(`/admin/serviceslist`)
     };
 
     render() {
@@ -201,7 +200,6 @@ class Policy extends Component {
                                                                 {type.display}
                                                             </option>
                                                         )}
-                                                         {/* <BsFillCaretDownFill /> */}
                                                     </Form.Control>
                                                   
                                                 </Form.Group>
@@ -255,4 +253,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Policy);
+export default connect(mapStateToProps, mapDispatchToProps)(Services);
