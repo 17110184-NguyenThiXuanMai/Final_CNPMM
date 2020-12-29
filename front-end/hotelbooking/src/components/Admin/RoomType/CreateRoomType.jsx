@@ -5,18 +5,13 @@ import { Card, Form, Button, Col, InputGroup, Image, Row } from 'react-bootstrap
 import MyToast from '../../../components/Admin/MyToast';
 import axios from 'axios';
 import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill } from "react-icons/bs";
-import ReactFirebaseFileUpload from './ReactFirebaseFileUpload';
-
-// import { storage } from "../../../firebase/firebase";
-// import firebase from "firebase";
-// import { findRenderedComponentWithType } from 'react-dom/test-utils';
+import { storage } from "../../../firebase/firebase";
 
 class CreateRoomType extends Component {
   constructor(props) {
     super(props);
     this.state = this.initialState;
     this.state = {
-
       types: [],
       bedTypes: [],
       pets: false,
@@ -24,17 +19,50 @@ class CreateRoomType extends Component {
       television: false,
       bath: false,
       show: false,
-      coverPhotoURL:'',
-      
+      image: null,
+      progress: 0
     };
-    
+
     this.roomTypeChange = this.roomTypeChange.bind(this);
     this.submitRoomType = this.submitRoomType.bind(this);
+    this.handleChange = this
+      .handleChange
+      .bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
   }
 
   initialState = {
     id: '', titleRoomType: '', bedType: '', type: '', size: '', pets: '', breakfast: '', television: '', bath: '', amount: '', adults: '', children: '', description: '', coverPhotoURL: '', price: ''
   };
+
+  handleChange = e => {
+    if (e.target.files[0]) {
+      const image = e.target.files[0];
+      this.setState(() => ({ image }));
+    }
+  }
+
+  handleUpload = () => {
+    const { image } = this.state;
+    const uploadTask = storage.ref(`images/${image.name}`).put(image);
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        // progrss function ....
+        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        this.setState({ progress });
+      },
+      (error) => {
+        // error function ....
+        console.log(error);
+      },
+      () => {
+        // complete function ....
+        storage.ref('images').child(image.name).getDownloadURL().then(coverPhotoURL => {
+          console.log(coverPhotoURL);
+          this.setState({ coverPhotoURL });
+        })
+      });
+  }
 
   componentDidMount() {
     const roomTypeId = +this.props.match.params.id;
@@ -43,7 +71,6 @@ class CreateRoomType extends Component {
     }
     this.findAllTypes();
     this.findAllBeds();
-    
   }
 
   findAllTypes = () => {
@@ -71,33 +98,6 @@ class CreateRoomType extends Component {
         });
       });
   };
-
-  handleChange =(coverPhotoURL) => {
-    this.setState({
-      coverPhotoURL: coverPhotoURL
-    })
-  }
-
-  // handleSave = () =>
-  // {
-  //   let bucketName = 'images'
-  //   let file = this.state.coverPhotoURL[0]
-  //   let storageRef = firebase.storage().ref(`${bucketName}/${file.name}`)
-  //   let uploadTask = storageRef.put(file)
-  //   uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-  //   () => {
-  //     let downloadURL = uploadTask.snapshot.downloadURL
-  //   })
-  // }
-
-  // showImage = () => {
-  //   let storageRef = firebase.storage().ref()
-  //   let spaceRef = storageRef.child('images/' + this.state.coverPhotoURL[0].name)
-  //   storageRef.child('images/'+this.state.coverPhotoURL[0].name).getDownloadURL().then((url) => {
-  //     console.log(url)
-  //     document.getElementById('new-img').src = url
-  //   })}
-  
 
   findRoomTypeById = (roomTypeId) => {
     this.props.fetchRoomType(roomTypeId);
@@ -161,7 +161,6 @@ class CreateRoomType extends Component {
     this.setState(this.initialState);
   };
 
-
   updateRoomType = event => {
     event.preventDefault();
 
@@ -221,7 +220,13 @@ class CreateRoomType extends Component {
 
   render() {
     const { titleRoomType, bedType, type, size, amount, adults, children, description, coverPhotoURL, price } = this.state;
-
+    const style = {
+      height: '50vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center'
+    };
     return (
       <div className="container">
         <div style={{ "display": this.state.show ? "block" : "none" }}>
@@ -278,23 +283,24 @@ class CreateRoomType extends Component {
                 <Form.Group as={Col} controlId="formGridCoverPhotoURL">
                   <Form.Label>Cover Photo URL</Form.Label>
                   <InputGroup>
+                    <div style={style}>
+                      <progress value={this.state.progress} max="100" />
+                      <br />
+                      <input type="file" onChange={this.handleChange} />
+                      <button className="btn btn-white" onClick={this.handleUpload}>Upload</button>
+                      <br />
+                      {coverPhotoURL}
+                      <img src={this.state.coverPhotoURL || 'http://via.placeholder.com/400x300'} alt="Uploaded images" height="300" width="400" />
+                    </div>
                     {/* <Form.Control required autoComplete="off"
                       type="test" name="coverPhotoURL"
                       value={coverPhotoURL} onChange={this.roomTypeChange}
                       className={"form-control"}
                       placeholder="Enter Room Type Cover Photo URL" /> */}
-                      {coverPhotoURL}
-                    <InputGroup.Append>
+                    {/* <InputGroup.Append>
                       {this.state.coverPhotoURL !== '' && <Image src={this.state.coverPhotoURL} roundedRight width="40" height="38" />}
-                    </InputGroup.Append>
+                    </InputGroup.Append> */}
                   </InputGroup>
-
-    <ReactFirebaseFileUpload  />
-
-    {/* <input type="file" onChange={(e)=>{this.handleChange(e.target.coverPhotoURL)}} />
-    <button onClick={this.handleSave}>Save</button>
-    <button onClick={this.showImage}>Show image</button>
-    <div id="new-img"> </div> */}
                 </Form.Group>
                 <Form.Group as={Col} controlId="formGridTitle">
                   <Form.Label>Amount</Form.Label>
@@ -306,7 +312,7 @@ class CreateRoomType extends Component {
                 </Form.Group>
               </Form.Row>
               <Form.Row>
-              <Form.Group as={Col} controlId="formGridType">
+                <Form.Group as={Col} controlId="formGridType">
                   <Form.Label>Bed Type</Form.Label>
                   <Form.Control required as="select"
                     form onChange={this.roomTypeChange}
