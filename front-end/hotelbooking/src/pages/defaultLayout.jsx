@@ -1,21 +1,22 @@
 import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Header from '../components/HomePage/Header'
-import Login from './HomePage/Login'
-import Register from './HomePage/Register'
+import Login from './HomePage/Login/Login'
+import Register from './HomePage/Register/Register'
 import HomePage from './HomePage/HomePage'
 import Footer from '../components/HomePage/Footer'
 import { Provider } from 'react-redux';
 import store from '../services/store';
 // import RoomDetail from './HomePage/RoomDetail'
-import Profile from './HomePage/Profile'
-import Rooms from './HomePage/Rooms'
-import Booknow from './HomePage/Booknow'
-import SingleRoom from './HomePage/SingleRoom'
-import Blog from './HomePage/Blog'
-import Contact from './HomePage/Contact'
-import AboutUs from './HomePage/AboutUs'
+import Profile from './HomePage/Profile/Profile'
+import Rooms from './HomePage/Room/Rooms'
+import Booknow from './HomePage/Booknow/Booknow'
+import SingleRoom from './HomePage/Room/SingleRoom'
+import Blog from '../pages/HomePage/Review/Blog'
+import Contact from '../pages/HomePage/Contact/Contact'
+import AboutUs from '../pages/HomePage/About/AboutUs'
 import PrivateRoute from '../PrivateRoute';
+import RestaurantContainer from '../components/HomePage/Booknow/RestaurantContainer'
 
 export default class DefaultLayout extends Component {
     render() {
@@ -34,7 +35,7 @@ export default class DefaultLayout extends Component {
                             {/* <Route exact path="/rooms/:id" component={RoomDetail} />  */}
                             <Route exact path="/rooms/" component={Rooms} />  
                             <Route exact path="/rooms/:id" component={SingleRoom} />   
-                            <PrivateRoute exact path="/booknow/:id" component={Booknow} />     
+                            <PrivateRoute exact path="/booknow/:id" component={RestaurantContainer} />     
                             <Route exact path="/review/" component={Blog} />   
                             <Route exact path="/contact/" component={Contact} />  
                             <Route exact path="/about/" component={AboutUs} />  

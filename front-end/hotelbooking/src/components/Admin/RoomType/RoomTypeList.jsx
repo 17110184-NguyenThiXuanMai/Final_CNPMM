@@ -191,12 +191,13 @@ class RoomTypeList extends Component {
                                                 <thead>
                                                     <tr>
                                                         <th>Title Room Type</th>
-                                                        <th>Slug</th>
+                                                        <th>Bed Type</th>
                                                         <th>Type</th>
                                                         <th onClick={this.sortData}>Price <div className={this.state.sortDir === "asc" ? "arrow arrow-up" : "arrow arrow-down"}> </div></th>
                                                         <th>Size</th>
                                                         <th>Amount</th>
-                                                        <th>Capacity</th>
+                                                        <th>Adults</th>
+                                                        <th>Children</th>
                                                         <th>Description</th>
                                                         <th>Pets</th>
                                                         <th>Breakfast</th>
@@ -215,22 +216,19 @@ class RoomTypeList extends Component {
                                                                     <td>
                                                                         <Image src={roomType.coverPhotoURL} rounded width="100" height="100" /> &nbsp; {roomType.titleRoomType}
                                                                     </td>
-                                                                    <td>{roomType.slug}</td>
+                                                                    <td>{roomType.bedType}</td>
                                                                     <td>{roomType.type}</td>
                                                                     <td>{roomType.price}</td>
                                                                     <td>{roomType.size}</td>
                                                                     <td>{roomType.amount}</td>
-                                                                    <td>{roomType.capacity}</td>
+                                                                    <td>{roomType.adults}</td>
+                                                                    <td>{roomType.children}</td>
                                                                     <td>{roomType.description}</td>
                                                                     <td> {this.checkRoomType(roomType.pets)}</td>
                                                                     <td> {this.checkRoomType(roomType.breakfast)}</td>
                                                                     <td> {this.checkRoomType(roomType.television)}</td>
                                                                     <td> {this.checkRoomType(roomType.bath)}</td>
                                                                     <td>
-                                                                        {/* <ButtonGroup>
-                                                                            <Link to={"/admin/editroomtype/" + roomType.id} className="btn btn-sm btn-outline-primary"><BsPencilSquare /></Link>{' '}
-                                                                            <Button size="sm" variant="outline-danger" onClick={this.deleteRoomType.bind(this, roomType.id)}><BsFillTrashFill /></Button>
-                                                                        </ButtonGroup> */}
                                                                         <ul className="list-inline m-0">
                                                                             <li className="list-inline-item">
                                                                                 <Link to={"/admin/editroomtype/" + roomType.id} className="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i className="fa fa-edit"></i></Link>

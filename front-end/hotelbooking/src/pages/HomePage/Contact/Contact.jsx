@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '../../css/contact_1.css'
+import '../../../css/contact_1.css'
 import contact from './contact.jpg'
 
 export default class Contact extends Component {

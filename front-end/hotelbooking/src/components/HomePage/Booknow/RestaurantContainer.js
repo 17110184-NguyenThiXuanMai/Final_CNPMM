@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import ErrorPage from "./ErrorPage";
-import BookingForm from './BookingForm';
-import CustomerDetail from "./CustomerDetail";
-import BookingDetail from "./BookingDetail";
-import BookingList from "./BookingList";
-import CustomerList from "./CustomerList";
-import CustomerForm from "./CustomerForm";
+// import ErrorPage from "./ErrorPage";
+// import BookingForm from './BookingForm';
+// import CustomerDetail from "./CustomerDetail";
+// import BookingDetail from "./BookingDetail";
+// import BookingList from "./BookingList";
+// import CustomerList from "./CustomerList";
+// import CustomerForm from "./CustomerForm";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Booknow from "../../../pages/HomePage/Booknow";
+import Booknow from "../../../pages/HomePage/Booknow/Booknow";
 
 class RestaurantContainer extends Component {
   constructor(props) {
@@ -32,7 +32,6 @@ class RestaurantContainer extends Component {
     this.onBookingSubmit =  this.onBookingSubmit.bind(this);
     this.onCustomerSubmit = this.onCustomerSubmit.bind(this);
     this.onTableDateSubmit = this.onTableDateSubmit.bind(this);
-
   }
 
   fetchData(url, callback) {
@@ -68,18 +67,22 @@ class RestaurantContainer extends Component {
       let newBookings = bookings._embedded.bookings;
       this.setState({ bookings: newBookings });
     });
+
     this.fetchData("http://localhost:8080/api/test/customers", customers => {
       this.setState({ customers: customers._embedded.customers });
     });
+
     this.fetchData("http://localhost:8080/api/test/transactions", transactions => {
       this.setState({ transactions: transactions._embedded.transactions });
     });
+
     this.fetchData(
       "http://localhost:8080/api/test/restaurant-tables",
       restaurantTables => {
         this.setState({ restaurantTables: restaurantTables });
       }
     );
+    
     this.fetchData(
       `http://localhost:8080/api/test/restaurant-tables/availableondate/${stringDate}`,
       restaurantTables => {
@@ -156,14 +159,13 @@ class RestaurantContainer extends Component {
     this.setState({ selectedCustomer })
   }
 
-
-
   render() {
     return (
       <Router>
         <React.Fragment>
+          <Switch>
           {/* <NavBar /> */}
-          <CustomerForm
+          {/* <CustomerForm
             onSubmit={this.onCustomerSubmit}
             />
           <BookingForm
@@ -172,7 +174,7 @@ class RestaurantContainer extends Component {
             restaurantTables={this.state.restaurantTables}/>
           <Switch>
             <Route exact path="/admin/bookings" render={() => <BookingList bookingsData={this.state.todayBookings} />} />
-            {/* <Route path="/about" component={About} /> */}
+            <Route path="/about" component={About} />
             <Route
               exact
               path="/admin/customers"
@@ -196,7 +198,7 @@ class RestaurantContainer extends Component {
                   booking={this.state.selectedBooking}
                 />
               </>}
-            />
+            /> */}
           
             {/* <Route
               path="/tablesondate"
@@ -209,9 +211,9 @@ class RestaurantContainer extends Component {
                 <TransactionList transactionsData={this.state.transactions} />
               )}
             /> */}
-            <Route component={ErrorPage} />
+            {/* <Route component={ErrorPage} /> */}
+            <Booknow />
           </Switch>
-          <Booknow />
         </React.Fragment>
       </Router>
       

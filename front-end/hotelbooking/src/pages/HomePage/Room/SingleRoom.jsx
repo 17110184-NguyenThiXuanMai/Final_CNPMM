@@ -1,18 +1,18 @@
 import React, {Component } from 'react';
 
 import {connect} from 'react-redux';
-import {saveRoomType, fetchRoomType, updateRoomType} from '../../services/index';
+import {saveRoomType, fetchRoomType, updateRoomType} from '../../../services/index';
 
-import Banner from '../../components/HomePage/Banner';
-import defaultBcg from '../../images/room-1.jpeg'
+import Banner from '../../../components/HomePage/Banner';
+import defaultBcg from '../../../images/room-1.jpeg'
 import {Link} from 'react-router-dom'
-import {RoomContext} from '../../context'
-import StyledHero from '../../components/HomePage/StyledHero';
+import {RoomContext} from '../../../context'
+import StyledHero from '../../../components/HomePage/StyledHero';
 import axios from 'axios';
-import '../../css/main.css'
+import '../../../css/main.css'
 import { Image} from 'react-bootstrap';
-import Booking from '../../components/HomePage/Booking/Booking';
-import Gallery from '../../components/HomePage/Gallery/Gallery';
+import Booking from '../../../components/HomePage/Booking/Booking';
+import Gallery from '../../../components/HomePage/Gallery/Gallery';
 
 class SingleRoom extends Component {
     constructor(props) {

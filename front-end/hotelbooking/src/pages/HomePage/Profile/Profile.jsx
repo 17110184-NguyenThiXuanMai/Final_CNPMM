@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import './profile.css'
-import AuthService from "../../services/Login/auth.service";
+import AuthService from "../../../services/Login/auth.service";
 
 export default class Profile extends Component {
   constructor(props) {

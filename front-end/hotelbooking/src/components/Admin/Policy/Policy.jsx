@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { saveService, fetchService, updateService } from '../../services/index';
+import { saveService, fetchService, updateService } from '../../../services/index';
 import { Card, Form, Button, Col, Row } from 'react-bootstrap';
-import MyToast from '../../components/Admin/MyToast';
+import MyToast from '../MyToast';
 import axios from 'axios';
 import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill, BsFillCaretDownFill } from "react-icons/bs";
 

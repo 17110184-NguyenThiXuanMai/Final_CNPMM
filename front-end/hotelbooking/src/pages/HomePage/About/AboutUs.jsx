@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '../HomePage/about_2.css'
+import './about_2.css'
 import about from './about.jpg'
 // import loaders from './loaders.jpg'
 

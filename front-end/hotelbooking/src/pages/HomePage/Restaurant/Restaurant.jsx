@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Title from '../../components/HomePage/Title';
-import '../../css/restaurant.css'
+import Title from '../../../components/HomePage/Title';
+import '../../../css/restaurant.css'
 import { BsChevronRight } from "react-icons/bs";
 import axios from 'axios';
 

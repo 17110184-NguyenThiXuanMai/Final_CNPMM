@@ -1,19 +1,19 @@
 import React, {Component } from 'react';
 
 import {connect} from 'react-redux';
-import {saveRoomType, fetchRoomType, updateRoomType} from '../../services/index';
+import {saveRoomType, fetchRoomType, updateRoomType} from '../../../services/index';
 
 import moment from 'moment';
 import DatePicker from "react-datepicker";
 import {Link} from 'react-router-dom'
-import {RoomContext} from '../../context'
+import {RoomContext} from '../../../context'
 import axios from 'axios';
-import "../../css/main.css"
+import "../../../css/main.css"
 import "react-datepicker/dist/react-datepicker.css";
-import CustomerForm from '../../components/HomePage/Booknow/CustomerForm'
-import BookingForm from '../../components/HomePage/Booknow/BookingForm'
-import CustomerList from '../../components/HomePage/Booknow/CustomerList';
-import CustomerDetail from '../../components/HomePage/Booknow/CustomerDetail';
+import CustomerForm from '../../../components/HomePage/Booknow/CustomerForm'
+import BookingForm from '../../../components/HomePage/Booknow/BookingForm'
+import CustomerList from '../../../components/HomePage/Booknow/CustomerList';
+import CustomerDetail from '../../../components/HomePage/Booknow/CustomerDetail';
 
 class Booknow extends Component {
     constructor(props) {

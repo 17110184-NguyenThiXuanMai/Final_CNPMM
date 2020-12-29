@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '../../css/review.css'
+import '../../../css/review.css'
 import booking from './booking.jpg'
 
 export default class Blog extends Component {

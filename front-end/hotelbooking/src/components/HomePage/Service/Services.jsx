@@ -11,8 +11,7 @@ export default class Services extends Component {
             {
                 date: "Oct 20, 2018",
                 title: "How to book your stay",
-                image: <img src={index_1}></img>
-                
+                image: <img src={index_1}></img> 
             },
             {
                 date: "Oct 21, 2019",

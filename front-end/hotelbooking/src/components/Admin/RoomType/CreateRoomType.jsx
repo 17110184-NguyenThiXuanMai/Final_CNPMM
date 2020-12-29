@@ -1,306 +1,218 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { connect } from 'react-redux';
 import { saveRoomType, fetchRoomType, updateRoomType } from '../../../services/index';
 import { Card, Form, Button, Col, InputGroup, Image, Row } from 'react-bootstrap';
 import MyToast from '../../../components/Admin/MyToast';
 import axios from 'axios';
 import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill } from "react-icons/bs";
+import ReactFirebaseFileUpload from './ReactFirebaseFileUpload';
+
+// import { storage } from "../../../firebase/firebase";
+// import firebase from "firebase";
+// import { findRenderedComponentWithType } from 'react-dom/test-utils';
 
 class CreateRoomType extends Component {
   constructor(props) {
     super(props);
     this.state = this.initialState;
     this.state = {
-        // genres: [],
-        // languages : [],
-        types: [],
-        pets: false,
-        breakfast: false,
-        television: false,
-        bath: false,
-        show : false
+
+      types: [],
+      bedTypes: [],
+      pets: false,
+      breakfast: false,
+      television: false,
+      bath: false,
+      show: false,
+      coverPhotoURL:'',
+      
     };
+    
     this.roomTypeChange = this.roomTypeChange.bind(this);
     this.submitRoomType = this.submitRoomType.bind(this);
-  }  
+  }
 
   initialState = {
-      id:'', titleRoomType:'', slug:'',type:'',size:'',pets:'',breakfast:'',television:'', bath:'', amount:'', capacity:'',description:'', coverPhotoURL:'', price:''
+    id: '', titleRoomType: '', bedType: '', type: '', size: '', pets: '', breakfast: '', television: '', bath: '', amount: '', adults: '', children: '', description: '', coverPhotoURL: '', price: ''
   };
 
   componentDidMount() {
-      const roomTypeId = +this.props.match.params.id;
-      if(roomTypeId) {
-          this.findRoomTypeById(roomTypeId);
-      }
-      this.findAllTypes();
-      // this.findAllGenres();
+    const roomTypeId = +this.props.match.params.id;
+    if (roomTypeId) {
+      this.findRoomTypeById(roomTypeId);
+    }
+    this.findAllTypes();
+    this.findAllBeds();
+    
   }
 
   findAllTypes = () => {
-      axios.get("http://localhost:8080/api/test/roomtypes/types")
-          .then(response => response.data)
-          .then((data) => {
-              this.setState({
-                  types: [{value:'', display:'Select Type'}]
-                      .concat(data.map(type => {
-                          return {value:type, display:type}
-                      }))
-              });
-          });
+    axios.get("http://localhost:8080/api/test/roomtypes/types")
+      .then(response => response.data)
+      .then((data) => {
+        this.setState({
+          types: [{ value: '', display: 'Select Type' }]
+            .concat(data.map(type => {
+              return { value: type, display: type }
+            }))
+        });
+      });
   };
 
-  // findAllGenres = () => {
-  //     axios.get("http://localhost:8080/api/test/roomtypes/genres")
-  //         .then(response => response.data)
-  //         .then((data) => {
-  //             this.setState({
-  //                 genres: [{value:'', display:'Select Genre'}]
-  //                     .concat(data.map(genre => {
-  //                         return {value:genre, display:genre}
-  //                     }))
-  //             });
-  //         });
-  // };
+  findAllBeds = () => {
+    axios.get("http://localhost:8080/api/test/roomtypes/bedtypes")
+      .then(response => response.data)
+      .then((data) => {
+        this.setState({
+          bedTypes: [{ value: '', display: 'Select Bed Type' }]
+            .concat(data.map(bedType => {
+              return { value: bedType, display: bedType }
+            }))
+        });
+      });
+  };
 
+  handleChange =(coverPhotoURL) => {
+    this.setState({
+      coverPhotoURL: coverPhotoURL
+    })
+  }
 
-  /*findBookById = (bookId) => {
-      fetch("http://localhost:8081/rest/books/"+bookId)
-          .then(response => response.json())
-          .then((book) => {
-              if(book) {
-                  this.setState({
-                      id: book.id,
-                      title: book.title,
-                      author: book.author,
-                      coverPhotoURL: book.coverPhotoURL,
-                      isbnNumber: book.isbnNumber,
-                      price: book.price,
-                      language: book.language,
-                      genre: book.genre
-                  });
-              }
-          }).catch((error) => {
-              console.error("Error - "+error);
-          });
-  };*/
+  // handleSave = () =>
+  // {
+  //   let bucketName = 'images'
+  //   let file = this.state.coverPhotoURL[0]
+  //   let storageRef = firebase.storage().ref(`${bucketName}/${file.name}`)
+  //   let uploadTask = storageRef.put(file)
+  //   uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+  //   () => {
+  //     let downloadURL = uploadTask.snapshot.downloadURL
+  //   })
+  // }
+
+  // showImage = () => {
+  //   let storageRef = firebase.storage().ref()
+  //   let spaceRef = storageRef.child('images/' + this.state.coverPhotoURL[0].name)
+  //   storageRef.child('images/'+this.state.coverPhotoURL[0].name).getDownloadURL().then((url) => {
+  //     console.log(url)
+  //     document.getElementById('new-img').src = url
+  //   })}
+  
 
   findRoomTypeById = (roomTypeId) => {
-      this.props.fetchRoomType(roomTypeId);
-      setTimeout(() => {
-          let roomType = this.props.roomTypeObject.roomType;
-          if(roomType != null) {
-              this.setState({
-                  id: roomType.id,
-                  titleRoomType: roomType.titleRoomType,
-                  slug: roomType.slug,
-                  type: roomType.type,
-                  size: roomType.size,
-                  amount: roomType.amount,
-                  capacity: roomType.capacity,
-                  pets: roomType.pets,
-                  breakfast: roomType.breakfast,
-                  television: roomType.television,
-                  bath: roomType.bath,
-                  description: roomType.description,
-                  coverPhotoURL: roomType.coverPhotoURL,
-                  price: roomType.price
-              });
-          }
-      }, 1000);
-      /*axios.get("http://localhost:8081/rest/books/"+bookId)
-          .then(response => {
-              if(response.data != null) {
-                  this.setState({
-                      id: response.data.id,
-                      title: response.data.title,
-                      author: response.data.author,
-                      coverPhotoURL: response.data.coverPhotoURL,
-                      isbnNumber: response.data.isbnNumber,
-                      price: response.data.price,
-                      language: response.data.language,
-                      genre: response.data.genre
-                  });
-              }
-          }).catch((error) => {
-              console.error("Error - "+error);
-          });*/
+    this.props.fetchRoomType(roomTypeId);
+    setTimeout(() => {
+      let roomType = this.props.roomTypeObject.roomType;
+      if (roomType != null) {
+        this.setState({
+          id: roomType.id,
+          titleRoomType: roomType.titleRoomType,
+          bedType: roomType.bedType,
+          type: roomType.type,
+          size: roomType.size,
+          amount: roomType.amount,
+          adults: roomType.adults,
+          children: roomType.children,
+          pets: roomType.pets,
+          breakfast: roomType.breakfast,
+          television: roomType.television,
+          bath: roomType.bath,
+          description: roomType.description,
+          coverPhotoURL: roomType.coverPhotoURL,
+          price: roomType.price
+        });
+      }
+    }, 1000);
   };
 
   resetRoomType = () => {
-      this.setState(() => this.initialState);
+    this.setState(() => this.initialState);
   };
-
-  /*submitBook = event => {
-      event.preventDefault();
-
-      const book = {
-          title: this.state.title,
-          author: this.state.author,
-          coverPhotoURL: this.state.coverPhotoURL,
-          isbnNumber: this.state.isbnNumber,
-          price: this.state.price,
-          language: this.state.language,
-          genre: this.state.genre
-      };
-
-      const headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-
-      fetch("http://localhost:8081/rest/books", {
-          method: 'POST',
-          body: JSON.stringify(book),
-          headers
-      })
-      .then(response => response.json())
-      .then((book) => {
-          if(book) {
-              this.setState({"show":true, "method":"post"});
-              setTimeout(() => this.setState({"show":false}), 3000);
-          } else {
-              this.setState({"show":false});
-          }
-      });
-      this.setState(this.initialState);
-  };*/
 
   submitRoomType = event => {
-      event.preventDefault();
+    event.preventDefault();
 
-      const roomType = {
-          titleRoomType: this.state.titleRoomType,
-          slug: this.state.slug,
-          type: this.state.type,
-          size: this.state.size,
-          amount: this.state.amount,
-          capacity: this.state.capacity,
-          pets: this.state.pets,
-          breakfast: this.state.breakfast,
-          television: this.state.television,
-          bath: this.state.bath,
-          price: this.state.price,
-          description: this.state.description,
-          coverPhotoURL: this.state.coverPhotoURL
-      };
+    const roomType = {
+      titleRoomType: this.state.titleRoomType,
+      bedType: this.state.bedType,
+      type: this.state.type,
+      size: this.state.size,
+      amount: this.state.amount,
+      adults: this.state.adults,
+      children: this.state.children,
+      pets: this.state.pets,
+      breakfast: this.state.breakfast,
+      television: this.state.television,
+      bath: this.state.bath,
+      price: this.state.price,
+      description: this.state.description,
+      coverPhotoURL: this.state.coverPhotoURL
+    };
 
-      this.props.saveRoomType(roomType);
-      setTimeout(() => {
-          if(this.props.savedRoomTypeObject.roomType != null) {
-              this.setState({"show":true, "method":"post"});
-              setTimeout(() => this.setState({"show":false}), 3000);
-          } else {
-              this.setState({"show":false});
-          }
-      }, 2000);
-      /*axios.post("http://localhost:8081/rest/books", book)
-          .then(response => {
-              if(response.data != null) {
-                  this.setState({"show":true, "method":"post"});
-                  setTimeout(() => this.setState({"show":false}), 3000);
-              } else {
-                  this.setState({"show":false});
-              }
-          });*/
-
-      this.setState(this.initialState);
+    this.props.saveRoomType(roomType);
+    setTimeout(() => {
+      if (this.props.savedRoomTypeObject.roomType != null) {
+        this.setState({ "show": true, "method": "post" });
+        setTimeout(() => this.setState({ "show": false }), 3000);
+      } else {
+        this.setState({ "show": false });
+      }
+    }, 2000);
+    this.setState(this.initialState);
   };
 
-  /*updateBook = event => {
-      event.preventDefault();
-
-      const book = {
-          id: this.state.id,
-          title: this.state.title,
-          author: this.state.author,
-          coverPhotoURL: this.state.coverPhotoURL,
-          isbnNumber: this.state.isbnNumber,
-          price: this.state.price,
-          language: this.state.language,
-          genre: this.state.genre
-      };
-
-      const headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-
-      fetch("http://localhost:8081/rest/books", {
-          method: 'PUT',
-          body: JSON.stringify(book),
-          headers
-      })
-      .then(response => response.json())
-      .then((book) => {
-          if(book) {
-              this.setState({"show":true, "method":"put"});
-              setTimeout(() => this.setState({"show":false}), 3000);
-              setTimeout(() => this.bookList(), 3000);
-          } else {
-              this.setState({"show":false});
-          }
-      });
-      this.setState(this.initialState);
-  };*/
 
   updateRoomType = event => {
-      event.preventDefault();
+    event.preventDefault();
 
-      const roomType = {
-          id: this.state.id,
-          titleRoomType: this.state.titleRoomType,
-          slug: this.state.slug,
-          type: this.state.type,
-          size: this.state.size,
-          amount: this.state.amount,
-          capacity: this.state.capacity,
-          pets: this.state.pets,
-          breakfast: this.state.breakfast,
-          television: this.state.television,
-          bath: this.state.bath,
-          price: this.state.price,
-          description: this.state.description,
-          coverPhotoURL: this.state.coverPhotoURL
-      };
-      this.props.updateRoomType(roomType);
-      setTimeout(() => {
-          if(this.props.updatedRoomTypeObject.roomType != null) {
-              this.setState({"show":true, "method":"put"});
-              setTimeout(() => this.setState({"show":false}), 3000);
-          } else {
-              this.setState({"show":false});
-          }
-      }, 2000);
-      /*axios.put("http://localhost:8081/rest/books", book)
-          .then(response => {
-              if(response.data != null) {
-                  this.setState({"show":true, "method":"put"});
-                  setTimeout(() => this.setState({"show":false}), 3000);
-                  setTimeout(() => this.bookList(), 3000);
-              } else {
-                  this.setState({"show":false});
-              }
-          });*/
-      //this.setState(this.initialState);
+    const roomType = {
+      id: this.state.id,
+      titleRoomType: this.state.titleRoomType,
+      bedType: this.state.bedType,
+      type: this.state.type,
+      size: this.state.size,
+      amount: this.state.amount,
+      adults: this.state.adults,
+      children: this.state.children,
+      pets: this.state.pets,
+      breakfast: this.state.breakfast,
+      television: this.state.television,
+      bath: this.state.bath,
+      price: this.state.price,
+      description: this.state.description,
+      coverPhotoURL: this.state.coverPhotoURL
+    };
+    this.props.updateRoomType(roomType);
+    setTimeout(() => {
+      if (this.props.updatedRoomTypeObject.roomType != null) {
+        this.setState({ "show": true, "method": "put" });
+        setTimeout(() => this.setState({ "show": false }), 3000);
+      } else {
+        this.setState({ "show": false });
+      }
+    }, 2000);
   };
 
   roomTypeChange = event => {
-      this.setState({
-          [event.target.name]:event.target.value
-      });
+    this.setState({
+      [event.target.name]: event.target.value
+    });
   };
 
   handleCheckPets = event => {
-      this.setState({pets: event.target.checked});
+    this.setState({ pets: event.target.checked });
   }
 
   handleCheckBreakfast = event => {
-      this.setState({breakfast: event.target.checked});
+    this.setState({ breakfast: event.target.checked });
   }
 
   handleCheckTelevision = event => {
-      this.setState({television: event.target.checked});
+    this.setState({ television: event.target.checked });
   }
 
   handleCheckBath = event => {
-      this.setState({bath: event.target.checked});
+    this.setState({ bath: event.target.checked });
   }
 
   roomTypeList = () => {
@@ -308,7 +220,8 @@ class CreateRoomType extends Component {
   };
 
   render() {
-    const { titleRoomType, slug, type, size, amount, capacity, description, coverPhotoURL, price } = this.state;
+    const { titleRoomType, bedType, type, size, amount, adults, children, description, coverPhotoURL, price } = this.state;
+
     return (
       <div className="container">
         <div style={{ "display": this.state.show ? "block" : "none" }}>
@@ -316,7 +229,7 @@ class CreateRoomType extends Component {
         </div>
         <Card className={"card"}>
           <Card.Header>
-             {this.state.id ? <BsPlusSquareFill /> : <BsPlusSquareFill />} {this.state.id ? " Update RoomType " : " Add New RoomType "} 
+            {this.state.id ? <BsPlusSquareFill /> : <BsPlusSquareFill />} {this.state.id ? " Update RoomType " : " Add New RoomType "}
           </Card.Header>
           <Form onReset={this.resetRoomType} onSubmit={this.state.id ? this.updateRoomType : this.submitRoomType} id="roomTypeFormId">
             <Card.Body>
@@ -329,13 +242,13 @@ class CreateRoomType extends Component {
                     className={"form-control"}
                     placeholder="Enter Title Room Type" />
                 </Form.Group>
-                <Form.Group as={Col} controlId="formGridSlug">
-                  <Form.Label>Slug</Form.Label>
+                <Form.Group as={Col} controlId="formGridSize">
+                  <Form.Label>Size</Form.Label>
                   <Form.Control required autoComplete="off"
-                    type="test" name="slug"
-                    value={slug} onChange={this.roomTypeChange}
+                    type="test" name="size"
+                    value={size} onChange={this.roomTypeChange}
                     className={"form-control"}
-                    placeholder="Enter Slug" />
+                    placeholder="Enter Size" />
                 </Form.Group>
               </Form.Row>
               <Form.Row>
@@ -365,23 +278,23 @@ class CreateRoomType extends Component {
                 <Form.Group as={Col} controlId="formGridCoverPhotoURL">
                   <Form.Label>Cover Photo URL</Form.Label>
                   <InputGroup>
-                    <Form.Control required autoComplete="off"
+                    {/* <Form.Control required autoComplete="off"
                       type="test" name="coverPhotoURL"
                       value={coverPhotoURL} onChange={this.roomTypeChange}
                       className={"form-control"}
-                      placeholder="Enter Room Type Cover Photo URL" />
+                      placeholder="Enter Room Type Cover Photo URL" /> */}
+                      {coverPhotoURL}
                     <InputGroup.Append>
                       {this.state.coverPhotoURL !== '' && <Image src={this.state.coverPhotoURL} roundedRight width="40" height="38" />}
                     </InputGroup.Append>
                   </InputGroup>
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridSize">
-                  <Form.Label>Size</Form.Label>
-                  <Form.Control required autoComplete="off"
-                    type="test" name="size"
-                    value={size} onChange={this.roomTypeChange}
-                    className={"form-control"}
-                    placeholder="Enter Size" />
+
+    <ReactFirebaseFileUpload  />
+
+    {/* <input type="file" onChange={(e)=>{this.handleChange(e.target.coverPhotoURL)}} />
+    <button onClick={this.handleSave}>Save</button>
+    <button onClick={this.showImage}>Show image</button>
+    <div id="new-img"> </div> */}
                 </Form.Group>
                 <Form.Group as={Col} controlId="formGridTitle">
                   <Form.Label>Amount</Form.Label>
@@ -393,15 +306,18 @@ class CreateRoomType extends Component {
                 </Form.Group>
               </Form.Row>
               <Form.Row>
-                <Form.Group as={Col} controlId="formGridTitle">
-                  <Form.Label>Capacity</Form.Label>
-                  <InputGroup>
-                    <Form.Control required autoComplete="off"
-                      type="test" name="capacity"
-                      value={capacity} onChange={this.roomTypeChange}
-                      className={"form-control"}
-                      placeholder="Enter Capacity" />
-                  </InputGroup>
+              <Form.Group as={Col} controlId="formGridType">
+                  <Form.Label>Bed Type</Form.Label>
+                  <Form.Control required as="select"
+                    form onChange={this.roomTypeChange}
+                    name="bedType" value={bedType}
+                    className={"form-control"}>
+                    {this.state.bedTypes.map(bedType =>
+                      <option key={bedType.value} value={bedType.value}>
+                        {bedType.display}
+                      </option>
+                    )}
+                  </Form.Control>
                 </Form.Group>
                 <Form.Group as={Col} controlId="formGridDescription">
                   <Form.Label>Description</Form.Label>
@@ -412,61 +328,46 @@ class CreateRoomType extends Component {
                     placeholder="Enter Description" />
                 </Form.Group>
               </Form.Row>
-             
 
-                {/* <div className="form-group form-check">
-                  <div className="icheck-material-white">
-                    <input type="checkbox" id="form-check-input" value={this.state.pets}
-                      onChange={this.handleCheckPets} checked={this.state.pets} />
-                    <label for="user-checkbox2"> Pets </label>
-                  </div>
-                </div>
-                <div className="form-group form-check">
-                  <div className="icheck-material-white">
-                    <input type="checkbox" id="form-check-input" value={this.state.breakfast}
-                      onChange={this.handleCheckBreakfast}
-                      checked={this.state.breakfast} />
-                    <label for="user-checkbox2"> Breakfast </label>
-                  </div>
-
-                </div>
-                <div className="form-group form-check">
-                  <div className="icheck-material-white">
-                    <input type="checkbox" id="form-check-input" value={this.state.television}
-                      onChange={this.handleCheckTelevision}
-                      checked={this.state.television} />
-                    <label for="user-checkbox2"> Television </label>
-                  </div>
-
-                </div>
-                <div className="form-group form-check">
-                  <div className="icheck-material-white">
-                    <input type="checkbox" id="form-check-input" value={this.state.bath}
-                      onChange={this.handleCheckBath}
-                      checked={this.state.bath} />
-                    <label for="user-checkbox2"> Bath </label>
-                  </div>
-                </div> */}
-                 <div className="form-group">
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridTitle">
+                  <Form.Label>Adults</Form.Label>
+                  <InputGroup>
+                    <Form.Control required autoComplete="off"
+                      type="test" name="adults"
+                      value={adults} onChange={this.roomTypeChange}
+                      className={"form-control"}
+                      placeholder="Enter Adults" />
+                  </InputGroup>
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridDescription">
+                  <Form.Label>Children</Form.Label>
+                  <Form.Control required autoComplete="off"
+                    type="test" name="children"
+                    value={children} onChange={this.roomTypeChange}
+                    className={"form-control"}
+                    placeholder="Enter Children" />
+                </Form.Group>
+              </Form.Row>
+              <div className="form-group">
                 <div className="form-checkbox">
-                <label className="form-control-label" for="pets"> Pets </label>
+                  <label className="form-control-label" for="pets"> Pets </label>
                   <input type="checkbox" className="form-control-input"
                     value={this.state.pets}
                     onChange={this.handleCheckPets}
                     checked={this.state.pets}
                     name="pets" />
-                
                 </div>&nbsp;
                 <div className="form-checkbox">
-                <label className="form-control-label" for="breakfast"> Breakfast </label>
+                  <label className="form-control-label" for="breakfast"> Breakfast </label>
                   <input type="checkbox" className="form-control-input"
                     value={this.state.breakfast}
                     onChange={this.handleCheckBreakfast}
                     checked={this.state.breakfast}
-                    name="breakfast" />                
+                    name="breakfast" />
                 </div>&nbsp;
                 <div className="form-checkbox">
-                <label className="form-control-label" for="featured"> Television </label> 
+                  <label className="form-control-label" for="featured"> Television </label>
                   <input type="checkbox" className="form-control-input"
                     value={this.state.television}
                     onChange={this.handleCheckTelevision}
@@ -480,7 +381,7 @@ class CreateRoomType extends Component {
                     onChange={this.handleCheckBath}
                     checked={this.state.bath}
                     name="bath" />
-                  </div>
+                </div>
               </div>
             </Card.Body>
             <Card.Footer>
