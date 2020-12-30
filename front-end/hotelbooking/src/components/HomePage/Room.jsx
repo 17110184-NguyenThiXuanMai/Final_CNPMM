@@ -1,61 +1,27 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { deleteRoomType } from '../../services/index';
 import './../../css/Style.css';
 import {Image} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 class Room extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
             roomTypes: [],
-            search: '',
-            currentPage: 1,
-            roomTypesPerPage: 5,
-            sortDir: "asc"
+            search: ''
         };
     }
 
-    sortData = () => {
-        setTimeout(() => {
-            this.state.sortDir === "asc" ? this.setState({ sortDir: "desc" }) : this.setState({ sortDir: "asc" });
-            this.findAllRoomTypes(this.state.currentPage);
-        }, 500);
-    };
-
     componentDidMount() {
-        this.findAllRoomTypes(this.state.currentPage);
-    }
-
-    findAllRoomTypes(currentPage) {
-        currentPage -= 1;
-        axios.get("http://localhost:8080/api/test/roomtypes?pageNumber=" + currentPage + "&pageSize=" + this.state.roomTypesPerPage + "&sortBy=price&sortDir=" + this.state.sortDir)
-            .then(response => response.data)
+        axios.get("http://localhost:8080/api/test/roomtypes/findallnotpegeable")
+            // .then(response => response.data)
             .then((data) => {
                 this.setState({
-                    roomTypes: data.content,
-                    totalPages: data.totalPages,
-                    totalElements: data.totalElements,
-                    currentPage: data.number + 1
+                    roomTypes: data.data
                 });
             });
-    };
-
-    deleteRoomType = (roomTypeId) => {
-        this.props.deleteRoomType(roomTypeId);
-        setTimeout(() => {
-            if (this.props.roomTypeObject != null) {
-                this.setState({ "show": true });
-                setTimeout(() => this.setState({ "show": false }), 3000);
-                this.findAllRoomTypes(this.state.currentPage);
-            } else {
-                this.setState({ "show": false });
-            }
-        }, 1000);
-    };
+    }
 
     searchData = (currentPage) => {
         currentPage -= 1;
@@ -84,26 +50,14 @@ class Room extends Component {
                         </div>
                         <Link to={`/rooms/` + roomType.id} className="btn-primary room-link">Features</Link>
                     </div>
-                    <p className="room-info">{roomType.title}</p>
+                    <p className="room-info">{roomType.titleRoomType}</p>
                 </article>
             ))
         );
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        roomTypeObject: state.roomType
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        deleteRoomType: (roomTypeId) => dispatch(deleteRoomType(roomTypeId))
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Room);
+export default Room;
 
 
 

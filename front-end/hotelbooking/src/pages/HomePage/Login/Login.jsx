@@ -114,16 +114,8 @@ export default class Login extends Component {
                   <span className="font-weight-bold">Login</span>
                 </button>
               </div>
-              <div className="text-center p-t-12">
-                <span className="txt1">
-                  Forgot
-						</span> &nbsp;
-						<a className="txt2" href="#">
-                  Username / Password?
-						</a>
-              </div>
               <div className="text-center p-t-136">
-                <a className="txt2" href="#">
+                <a className="txt2" href="/signup">
                   Create your Account &nbsp;
                   <BsArrowRight />
                 </a>

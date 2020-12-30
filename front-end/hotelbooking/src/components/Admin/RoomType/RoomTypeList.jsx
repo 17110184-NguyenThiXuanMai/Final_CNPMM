@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import MyToast from '../../../components/Admin/MyToast';
 import axios from 'axios';
 import { deleteRoomType } from '../../../services/index';
-import { Card, Table, Image, ButtonGroup, Button, InputGroup, FormControl } from 'react-bootstrap';
-import { BsFillTrashFill, BsPencilSquare, BsSearch, BsFillXCircleFill, BsPlusSquareFill, BsList, BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft } from "react-icons/bs";
+import { Card, Image, Button, InputGroup, FormControl } from 'react-bootstrap';
+import {  BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft } from "react-icons/bs";
 
 class RoomTypeList extends Component {
     constructor(props) {

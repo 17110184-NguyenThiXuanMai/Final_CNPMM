@@ -5,6 +5,7 @@ import { Card, Form, Col} from 'react-bootstrap';
 import MyToast from '../MyToast';
 import axios from 'axios';
 import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill, BsFillCaretDownFill } from "react-icons/bs";
+import { storage } from "../../../firebase/firebase";
 
 class Services extends Component {
     constructor(props) {
@@ -16,10 +17,14 @@ class Services extends Component {
         };
         this.serviceChange = this.serviceChange.bind(this);
         this.submitService = this.submitService.bind(this);
+        this.handleChange = this
+        .handleChange
+        .bind(this);
+      this.handleUpload = this.handleUpload.bind(this);
     }
 
     initialState = {
-        id: '', title: '', type: '', description: ''
+        id: '', title: '', type: '', description: '', url: ''
     };
 
     componentDidMount() {
@@ -39,6 +44,7 @@ class Services extends Component {
                     id: service.id,
                     title: service.title,
                     type: service.type,
+                    url: service.url,
                     description: service.description,
                 });
             }
@@ -113,17 +119,19 @@ class Services extends Component {
         const service = {
             title: this.state.title,
             type: this.state.type,
+            url: this.state.url,
             description: this.state.description,
         };
         this.props.saveService(service);
         setTimeout(() => {
-            if (!!this.props.savedServiceObject.service) {
+            if (this.props.savedServiceObject.service != null) {
                 this.setState({ "show": true, "method": "post" });
                 setTimeout(() => this.setState({ "show": false }), 3000);
             } else {
                 this.setState({ "show": false });
             }
         }, 2000);
+        console.log(this.state.type)
         this.setState(this.initialState);
        // this.props.history.push(`/admin/policy/type=${this.state.type}`)
     };
@@ -135,6 +143,7 @@ class Services extends Component {
             id: this.state.id,
             title: this.state.title,
             type: this.state.type,
+            url: this.state.url,
             description: this.state.description,
         };
         this.props.updateService(service);
@@ -162,9 +171,46 @@ class Services extends Component {
         return this.props.history.push(`/admin/serviceslist`)
     };
 
-    render() {
-        const { title, description, type } = this.state;
+    handleChange = e => {
+        if (e.target.files[0]) {
+          const image = e.target.files[0];
+          this.setState(() => ({ image }));
+        }
+      }
+    
+      handleUpload = (event) => {
+        event.preventDefault();
+        
+        const { image } = this.state;
+        const uploadTask = storage.ref(`images/${image.name}`).put(image);
+        uploadTask.on('state_changed',
+          (snapshot) => {
+            // progrss function ....
+            // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            // this.setState({ progress });
+          },
+          (error) => {
+            // error function ....
+            console.log(error);
+          },
+          () => {
+            // complete function ....
+            storage.ref('images').child(image.name).getDownloadURL().then(url => {
+              console.log(url);
+              this.setState({ url });
+            })
+          });
+      }
 
+    render() {
+        const { title, description, type, url } = this.state;
+        const style = {
+            height: '60vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
+          };
         return (
             <div className="home">
                 <div className="slide">
@@ -172,13 +218,13 @@ class Services extends Component {
                         <div className="col">
                             <div className="container">
                                 <div style={{ "display": this.state.show ? "block" : "none" }}>
-                                    <MyToast show={this.state.show} message={this.state.method === "put" ? "Policy Updated Successfully." : "Policy Saved Successfully."} type={"success"} />
+                                    <MyToast show={this.state.show} message={this.state.method === "put" ? "Service Updated Successfully." : "Service Saved Successfully."} type={"success"} />
                                 </div>
                                 <Card className={"card"}>
                                     <Card.Header>
                                         {this.state.id ? <BsPlusSquareFill /> : <BsPlusSquareFill />} {this.state.id ? " Update Service" : " Add New Service"}
                                     </Card.Header>
-                                    <Form onReset={this.resetService} onSubmit={this.state.id ? this.updateService : this.submitService} id="policyFormId">
+                                    <Form onReset={this.resetService} onSubmit={this.state.id ? this.updateService : this.submitService} id="serviceFormId">
                                         <Card.Body>
                                             <Form.Row>
                                                 <Form.Group as={Col} controlId="formGridTitle">
@@ -201,7 +247,6 @@ class Services extends Component {
                                                             </option>
                                                         )}
                                                     </Form.Control>
-                                                  
                                                 </Form.Group>
                                                 <Form.Group as={Col} controlId="formGridDescription">
                                                     <Form.Label>Description</Form.Label>
@@ -210,6 +255,18 @@ class Services extends Component {
                                                         value={description} onChange={this.serviceChange}
                                                         className={"form-control"}
                                                         placeholder="Enter Description" />
+                                                </Form.Group>
+                                            </Form.Row> 
+                                            <Form.Row> 
+                                                <Form.Group as={Col} controlId="formGridUrl">
+                                                <div style={style}>
+                                                    {/* <progress value={this.state.progress} max="100" /> */}
+                                                    <br />
+                                                    <input type="file" onChange={this.handleChange} />
+                                                    <button className="btn btn-white" onClick={this.handleUpload}>Upload</button>
+                                                    <br />
+                                                    <img src={this.state.url || 'http://via.placeholder.com/400x300'} alt="Uploaded images" height="300" width="400" />
+                                                    </div>
                                                 </Form.Group>
                                             </Form.Row>
                                         </Card.Body>

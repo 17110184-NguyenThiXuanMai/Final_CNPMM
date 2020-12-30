@@ -6,6 +6,10 @@ import MyToast from '../../../components/Admin/MyToast';
 import axios from 'axios';
 import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill } from "react-icons/bs";
 import { storage } from "../../../firebase/firebase";
+import {Editor} from 'react-draft-wysiwyg';
+import { EditorState, convertToRaw } from 'draft-js';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from "draftjs-to-html";
 
 class CreateRoomType extends Component {
   constructor(props) {
@@ -20,7 +24,8 @@ class CreateRoomType extends Component {
       bath: false,
       show: false,
       image: null,
-      progress: 0
+      description: EditorState.createEmpty()
+      //description: ""
     };
 
     this.roomTypeChange = this.roomTypeChange.bind(this);
@@ -29,6 +34,7 @@ class CreateRoomType extends Component {
       .handleChange
       .bind(this);
     this.handleUpload = this.handleUpload.bind(this);
+    // this.onEditorStateChange = this.onEditorStateChange.bind(this);
   }
 
   initialState = {
@@ -42,14 +48,15 @@ class CreateRoomType extends Component {
     }
   }
 
-  handleUpload = () => {
+  handleUpload = (event) => {
+    event.preventDefault();
     const { image } = this.state;
     const uploadTask = storage.ref(`images/${image.name}`).put(image);
     uploadTask.on('state_changed',
       (snapshot) => {
         // progrss function ....
-        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        this.setState({ progress });
+        // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        // this.setState({ progress });
       },
       (error) => {
         // error function ....
@@ -192,12 +199,17 @@ class CreateRoomType extends Component {
     }, 2000);
   };
 
-  roomTypeChange = event => {
+  roomTypeChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value
     });
   };
 
+  onEditorStateChange = (description) => {
+    this.setState({
+      description
+    })
+  }
   handleCheckPets = event => {
     this.setState({ pets: event.target.checked });
   }
@@ -221,7 +233,7 @@ class CreateRoomType extends Component {
   render() {
     const { titleRoomType, bedType, type, size, amount, adults, children, description, coverPhotoURL, price } = this.state;
     const style = {
-      height: '50vh',
+      height: '60vh',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -284,12 +296,10 @@ class CreateRoomType extends Component {
                   <Form.Label>Cover Photo URL</Form.Label>
                   <InputGroup>
                     <div style={style}>
-                      <progress value={this.state.progress} max="100" />
-                      <br />
+                      {/* <br /> */}
                       <input type="file" onChange={this.handleChange} />
                       <button className="btn btn-white" onClick={this.handleUpload}>Upload</button>
                       <br />
-                      {coverPhotoURL}
                       <img src={this.state.coverPhotoURL || 'http://via.placeholder.com/400x300'} alt="Uploaded images" height="300" width="400" />
                     </div>
                     {/* <Form.Control required autoComplete="off"
@@ -325,16 +335,7 @@ class CreateRoomType extends Component {
                     )}
                   </Form.Control>
                 </Form.Group>
-                <Form.Group as={Col} controlId="formGridDescription">
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control required autoComplete="off"
-                    type="test" name="description"
-                    value={description} onChange={this.roomTypeChange}
-                    className={"form-control"}
-                    placeholder="Enter Description" />
-                </Form.Group>
               </Form.Row>
-
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridTitle">
                   <Form.Label>Adults</Form.Label>
@@ -353,6 +354,24 @@ class CreateRoomType extends Component {
                     value={children} onChange={this.roomTypeChange}
                     className={"form-control"}
                     placeholder="Enter Children" />
+                </Form.Group>
+              </Form.Row>
+              <Form.Row>
+              <Form.Group as={Col} controlId="formGridDescription">
+                  <Form.Label>Description</Form.Label>
+                  {/* <Form.Control required autoComplete="off"
+                    type="test" name="description"
+                    value={description} onChange={this.roomTypeChange}
+                    className={"form-control"}
+                    placeholder="Enter Description" /> */}
+                    <Editor
+                    value={description} 
+                    toolbarClassName="toolbarClassName"
+                    wrapperClassName="wrapperClassName"
+                    editorClassName="editorClassName"
+                    onChange={this.roomTypeChange}
+                  />
+                  {/* <textarea disabled value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}></textarea> */}
                 </Form.Group>
               </Form.Row>
               <div className="form-group">

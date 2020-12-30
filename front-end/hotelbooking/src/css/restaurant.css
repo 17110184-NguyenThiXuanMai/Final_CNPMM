@@ -1,7 +1,7 @@
 /* line 2, C:/Users/SPN Graphics/Desktop/hotel_up/Hotel_HTML/assets/scss/_dining.scss */
 .dining-area .single-dining-area {
   position: relative;
-  padding: 150px 0;
+  padding: 5px 0;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -37,7 +37,7 @@
   content: "";
   top: 0;
   bottom: 0;
-  background-image: url(../images/restaurant/dining-img.jpg);
+  /* background-image: url(../images/restaurant/dining-img.jpg); */
   width: 50%;
   border-radius: 0 5px 0 0;
   background-size: cover;
@@ -80,7 +80,8 @@
 /* line 52, C:/Users/SPN Graphics/Desktop/hotel_up/Hotel_HTML/assets/scss/_dining.scss */
 .dining-area .dining-caption {
   background: rgba(252, 252, 252, 0.95);
-  padding: 92px 98px 98px 96px;
+  /* padding: 92px 98px 98px 96px; */
+  padding: 10px 50px 10px 30px;
   border-radius: 5px;
 }
 

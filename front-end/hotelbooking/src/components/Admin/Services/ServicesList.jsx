@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { deleteService } from '../../../services/index';
-import { Card, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { Card, Button, InputGroup, FormControl, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import MyToast from '../MyToast';
 import axios from 'axios';
@@ -179,7 +179,7 @@ class ServicesList extends Component {
                         <div className="row">
                             <div className="col">
                                 <div style={{ "display": this.state.show ? "block" : "none" }}>
-                                    <MyToast show={this.state.show} message={"Policy Deleted Successfully."} type={"danger"} />
+                                    <MyToast show={this.state.show} message={"Service Deleted Successfully."} type={"danger"} />
                                 </div>
                                 <div className="card">
                                     <div className="card-body">
@@ -206,6 +206,7 @@ class ServicesList extends Component {
                                                     <tr>
                                                         <th>Title</th>
                                                         <th>Type</th>
+                                                        <th>Image</th>
                                                         <th>Description</th>
                                                     </tr>
                                                 </thead>
@@ -213,13 +214,16 @@ class ServicesList extends Component {
                                                     {
                                                         services.length === 0 ?
                                                             <tr align="center">
-                                                                <td colSpan="3">No Policies Available.</td>
+                                                                <td colSpan="4">No Policies Available.</td>
                                                             </tr> :
                                                             // services.filter(item => item.type === typeParam).map((service) => (
                                                                 services.map((service) => (
                                                                 <tr key={service.id}>
                                                                     <td>{service.title}</td>
                                                                     <td>{service.type}</td>
+                                                                    <td>
+                                                                        <Image src={service.url} rounded width="100" height="100" />
+                                                                    </td>
                                                                     <td>{service.description}</td>
                                                                     <td>
                                                                         {/* <ButtonGroup>
@@ -228,7 +232,7 @@ class ServicesList extends Component {
                                                                         </ButtonGroup> */}
                                                                         <ul className="list-inline m-0">
                                                                             <li className="list-inline-item">
-                                                                                <Link to={"/admin/editpolicy/" + service.id} className="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i className="fa fa-edit"></i></Link>
+                                                                                <Link to={"/admin/editservices/" + service.id} className="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i className="fa fa-edit"></i></Link>
                                                                             </li>
                                                                             <li className="list-inline-item">
                                                                                 <button onClick={this.deleteService.bind(this, service.id)} className="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i className="fa fa-trash"></i></button>

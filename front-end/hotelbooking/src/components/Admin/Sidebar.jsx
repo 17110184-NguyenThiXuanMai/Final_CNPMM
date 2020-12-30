@@ -27,9 +27,9 @@ export default class Sidebar extends Component {
             </Link>
           </li>
           <li>
-            <Link to="/admin/addpolicy">
+            <Link to="/admin/serviceslist">
               <i className="zmdi zmdi-format-list-bulleted"></i>
-              <span> Add Service </span>
+              <span> Service </span>
             </Link>
           </li>
           <li>
@@ -59,18 +59,6 @@ export default class Sidebar extends Component {
             <Link to="/admin/userlist">
               <i className="zmdi zmdi-face"></i>
               <span> User List </span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/admin/serviceslist">
-              <i className="zmdi zmdi-format-list-bulleted"></i>
-              <span> Service </span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/admin/policy/type=Restaurant">
-              <BiRestaurant />
-              <span> Restaurant </span>
             </Link>
           </li>
           <li>

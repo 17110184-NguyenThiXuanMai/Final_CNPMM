@@ -3,8 +3,6 @@ import {RoomContext} from '../../context';
 import Loading from './Loading';
 import Room from './Room';
 import Title from './Title';
-import store from '../../services/store';
-import { Provider } from 'react-redux';
 import '../../css/main.css'
 
 export default class FeaturedRooms extends Component {
@@ -17,11 +15,9 @@ export default class FeaturedRooms extends Component {
         return (
             <section className="featured-rooms">
                 <Title title="featured rooms" />
-                <Provider store={store}>
                 <div className="featured-rooms-center">
                     {loading?<Loading/>:<Room />}                  
                 </div>
-                </Provider>
             </section>
         );
     }
