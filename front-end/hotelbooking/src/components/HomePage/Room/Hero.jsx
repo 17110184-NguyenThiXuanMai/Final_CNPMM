@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../css/main.css'
+import '../../../css/main.css'
 
 export default function Hero({children, hero}) {
     return <header className={hero}>{children}</header>;

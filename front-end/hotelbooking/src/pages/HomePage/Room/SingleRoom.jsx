@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { saveRoomType, fetchRoomType, updateRoomType } from '../../../services/index';
-import Banner from '../../../components/HomePage/Banner';
+import Banner from '../../../components/HomePage/Room/Banner';
 import defaultBcg from '../../../images/room-1.jpeg'
 import { Link } from 'react-router-dom'
 import { RoomContext } from '../../../context'
-import StyledHero from '../../../components/HomePage/StyledHero';
+import StyledHero from '../../../components/HomePage/Room/StyledHero';
 import axios from 'axios';
 import '../../../css/main.css'
 
@@ -158,25 +158,6 @@ class SingleRoom extends Component {
                     </Banner>
                 </StyledHero>
                 <section className="single-room">
-                    {/* <div className="single-room-images">
-                         {defaultImg.map((item, index) => {
-                            return <img key={index} src={item} alt={this.state.title} />;
-                        })}
-                    </div> */}
-
-                    {/* {roomTypes.map((roomType) => {
-                            return (
-                            <div className="col-md-4 col-12 mx-auto" key={roomType.id}>
-                                <div className="card border-0 shadow-lg">
-                                <Image src={roomType.coverPhotoURL} /> 
-                                <img className= {this.state.coverPhotoURL}></img>
-                                </div>
-                            </div>)
-                        })} */}
-                    {/* <img src={this.state.coverPhotoURL} />
-                       <img src={this.state.coverPhotoURL} />
-                       <img src={this.state.coverPhotoURL} /> */}
-
                     <div className="single-room-info">
                         <article className="desc">
                             <h3>details</h3>

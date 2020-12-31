@@ -202,11 +202,12 @@ class ServicesList extends Component {
 
                                         <div className="table-responsive">
                                             <table className="table my-3">
-                                                <thead>
+                                                <thead className="">
                                                     <tr>
                                                         <th>Title</th>
                                                         <th>Type</th>
                                                         <th>Image</th>
+                                                        <th></th>
                                                         <th>Description</th>
                                                     </tr>
                                                 </thead>
@@ -214,14 +215,17 @@ class ServicesList extends Component {
                                                     {
                                                         services.length === 0 ?
                                                             <tr align="center">
-                                                                <td colSpan="4">No Policies Available.</td>
+                                                                <td colSpan="5">No Policies Available.</td>
                                                             </tr> :
                                                             // services.filter(item => item.type === typeParam).map((service) => (
                                                                 services.map((service) => (
+                                                                //  {
+                                                                //     if (service.confirm == `Disable`)
+                                                                //     {
                                                                 <tr key={service.id}>
                                                                     <td>{service.title}</td>
                                                                     <td>{service.type}</td>
-                                                                    <td>
+                                                                    <td colSpan="2">
                                                                         <Image src={service.url} rounded width="100" height="100" />
                                                                     </td>
                                                                     <td>{service.description}</td>
@@ -240,7 +244,9 @@ class ServicesList extends Component {
                                                                         </ul>
                                                                     </td>
                                                                 </tr>
-                                                            ))
+                                                                    // }}
+                                                                )
+                                                                    )
                                                     }
                                                 </tbody>
                                             </table>

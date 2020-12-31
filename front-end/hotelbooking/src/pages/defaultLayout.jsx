@@ -4,18 +4,18 @@ import Header from '../components/HomePage/Header'
 import Login from './HomePage/Login/Login'
 import Register from './HomePage/Register/Register'
 import HomePage from './HomePage/HomePage'
-import Footer from '../components/HomePage/Footer'
+import Footer from '../components/HomePage/Footer/Footer'
 import { Provider } from 'react-redux';
 import store from '../services/store';
 import Profile from './HomePage/Profile/Profile'
 import Rooms from './HomePage/Room/Rooms'
-import Booknow from './HomePage/Booknow/Booknow'
 import SingleRoom from './HomePage/Room/SingleRoom'
 import Blog from '../pages/HomePage/Review/Blog'
 import Contact from '../pages/HomePage/Contact/Contact'
 import AboutUs from '../pages/HomePage/About/AboutUs'
 import PrivateRoute from '../PrivateRoute';
 import RestaurantContainer from '../components/HomePage/Booknow/RestaurantContainer'
+import Editor from '../components/Admin/RoomType/Editor'
 
 export default class DefaultLayout extends Component {
     render() {
@@ -37,6 +37,7 @@ export default class DefaultLayout extends Component {
                                 <Route exact path="/review/" component={Blog} />
                                 <Route exact path="/contact/" component={Contact} />
                                 <Route exact path="/about/" component={AboutUs} />
+                                <Route path="/editor/" component={Editor} />
                             </Provider>
                         </div>
                     </body>

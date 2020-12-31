@@ -5,7 +5,6 @@ import { Redirect, Route } from 'react-router-dom'
 const PrivateRoute = ({ component: Component, ...rest }) => {
   // Add your own authentication on the below line.
   const isLoggedIn = AuthService.getCurrentUser()
-
   return (
     <Route
       {...rest}
@@ -13,7 +12,10 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         isLoggedIn ? (
           <Component {...props} />
         ) : (
-            <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+          <div>
+          <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+          </div>
+           
           )
       }
     />

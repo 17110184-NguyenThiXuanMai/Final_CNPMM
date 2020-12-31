@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import ReactFirebaseFileUpload from '../Admin/RoomType/ReactFirebaseFileUpload'
 
 export default class Dashboard extends Component {
     render() {
@@ -8,7 +7,7 @@ export default class Dashboard extends Component {
                 <div className="slide">
                     <div className="row">
                         <div className="container">
-                        {/* <ReactFirebaseFileUpload /> */}
+                            <h1>Welcome Admin Pages</h1>
                         </div>
                     </div>
                 </div>

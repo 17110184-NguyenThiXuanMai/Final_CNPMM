@@ -36,13 +36,11 @@ class Booknow extends Component {
             },
         };
         this.roomTypeChange = this.roomTypeChange.bind(this);
-        // this.submitRoomType = this.submitRoomType.bind(this);
         this.onBookingSubmit = this.onBookingSubmit.bind(this);
         this.onCustomerSubmit = this.onCustomerSubmit.bind(this);
         this.handleChangeEnd = this.handleChangeEnd.bind(this);
         this.handleChangeStart = this.handleChangeStart.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        // this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     customerOptions() {
@@ -70,9 +68,7 @@ class Booknow extends Component {
         const month = `${today.getMonth() + 1}`.padStart(2, 0)
         const day = `${today.getDate()}`.padStart(2, 0)
         const stringDate = [year, month, day].join("-")
-        // console.log(stringDate);
-        // console.log(`http://localhost:8080/bookings/date/${stringDate}`);
-
+    
         this.fetchData(`http://localhost:8080/api/test/bookings/date/${stringDate}`, bookings => {
             this.setState({ todayBookings: bookings });
         });
@@ -166,14 +162,6 @@ class Booknow extends Component {
             [event.target.name]: event.target.value
         });
     };
-
-    // handleInputChange (event) {
-    //     const stateName = event.target.name;
-    //     const value = event.target.value;
-    //     this.setState({
-    //         [stateName]: value
-    //     });
-    // }
 
     roomTypeList = () => {
         return this.props.history.push("/admin");

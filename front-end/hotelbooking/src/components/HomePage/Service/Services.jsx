@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import Title from '../Title';
 import '../../../css/restaurant.css'
-import { BsChevronRight } from "react-icons/bs";
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import {Image} from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 
 export default class Services extends Component {
     constructor(props) {
@@ -27,26 +25,46 @@ export default class Services extends Component {
         const { services } = this.state;
         return (
             <div>
-                <section className="services">
-                    <Title title="Services" />
-                    {            services.map((service) => (
-                          <div className="dining-area dining-padding-top" key={service.id}>
-                             {/* <div className="single-dining-area left-img"> */}
-                                     <div className="row">
-                                         {/* <div className="col-lg-4 col-md-4"> */}
-                                             <div className="dining-caption">
-                                             <Image src={service.url} className="left-img" height="300" width="400"/>
-                                                 <span>{service.title}</span>
-                                                 <h3>{service.type}</h3>
-                                                 <p>{service.description}</p>
-                                                 <a href="#" className="btn-2 border-btn">Learn More <BsChevronRight /> </a>
-                                             </div>
-                                         </div>
-                                     </div>
-                                         ))}
-                </section>
+                <Title title="Services" />
+                <div className="split_section_right container_custom">
+                    <div className="container">
+                        {services.map((service) => {
+                            if (service.id % 2 != 0)
+                            { return <div className="row row-xl-eq-height">
+                                    <div className="col-xl-6 order-xl-1 order-2">
+                                        <div className="split_section_image">
+                                            <Image src={service.url} className="background_image-img" />
+                                        </div>
+                                    </div>
+                                    <div className="col-xl-6 order-xl-2 order-1">
+                                        <div className="split_section_right_content">
+                                            <div className="split_section_title"><h1>{service.title}</h1></div>
+                                            <div className="split_section_text">
+                                                <p>{service.description}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            } else 
+                            { return <div className="row">
+                                        <div className="col-xl-6">
+                                            <div className="split_section_left_content">
+                                                <div className="split_section_title"><h1>{service.title}</h1></div>
+                                                <div className="split_section_text">
+                                                    <p>{service.description}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-xl-6">
+                                            <div className="split_section_image split_section_left_image">
+                                                <Image src={service.url} className="background_image-img" />
+                                            </div>
+                                        </div>
+                                    </div>
+                            }})}
+                         </div>     
+                </div>
             </div>
-
         )
     }
 }

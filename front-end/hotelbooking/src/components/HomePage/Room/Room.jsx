@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './../../css/Style.css';
+import '../../../css/Style.css';
 import {Image} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -9,13 +9,12 @@ class Room extends Component {
         super(props);
         this.state = {
             roomTypes: [],
-            search: ''
+            search: '',
         };
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8080/api/test/roomtypes/findallnotpegeable")
-            // .then(response => response.data)
+        axios.get("http://localhost:8080/api/test/roomtypes/findallnotpageable")
             .then((data) => {
                 this.setState({
                     roomTypes: data.data
@@ -43,7 +42,7 @@ class Room extends Component {
             roomTypes.map((roomType) => (
                 <article className="room">
                     <div className="img-container">
-                        <Image src={roomType.coverPhotoURL} alt="single room" />
+                        <Image src={roomType.coverPhotoURL} alt="single room" height="300" width="400" />
                         <div className="price-top">
                             <h6>${roomType.price}</h6>
                             <p>per night</p>
@@ -58,39 +57,3 @@ class Room extends Component {
 }
 
 export default Room;
-
-
-
-
-// import React, { Component } from 'react'
-// import { Link } from 'react-router-dom';
-// import defaultImg from '../../images/room-1.jpeg';
-//  import PropTypes from 'prop-types';
-// export default function Room({room}) {
-//     const{name, slug, images, price} = room;
-//     return (
-//         <article className="room">
-//             <div className="img-container">
-//                 <img src={images[0] || defaultImg} alt="single room" />
-//                 <div className="price-top">
-//                     <h6>${price}</h6>
-//                     <p>per night</p>
-//                 </div>
-//                 <Link to={`/rooms/${slug}`} className="btn-primary room-link">Features</Link>
-//             </div>
-//             <p className="room-info">{name}</p>
-//         </article>
-//     );
-// }
-
-// Room.propTypes = {
-//     room: PropTypes.shape({
-//         name:PropTypes.string.isRequired,
-//         slug:PropTypes.string.isRequired,
-//         images:PropTypes.arrayOf(PropTypes.string).isRequired,
-//         price:PropTypes.number.isRequired,
-//     })
-// }
-
-
-

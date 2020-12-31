@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link, NavLink } from 'react-router-dom'
 import AuthService from "../../services/Login/auth.service";
 import jquery from 'jquery';
 

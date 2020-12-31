@@ -6,10 +6,12 @@ import MyToast from '../../../components/Admin/MyToast';
 import axios from 'axios';
 import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill } from "react-icons/bs";
 import { storage } from "../../../firebase/firebase";
-import {Editor} from 'react-draft-wysiwyg';
-import { EditorState, convertToRaw } from 'draft-js';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import draftToHtml from "draftjs-to-html";
+// import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+// import ReactQuill from 'react-quill';
+// import 'react-quill/dist/quill.snow.css';
+// import renderHTML from 'react-render-html';
+// import _ from 'lodash';
+import Editor from './Editor'
 
 class CreateRoomType extends Component {
   constructor(props) {
@@ -24,8 +26,7 @@ class CreateRoomType extends Component {
       bath: false,
       show: false,
       image: null,
-      description: EditorState.createEmpty()
-      //description: ""
+      confirms: []
     };
 
     this.roomTypeChange = this.roomTypeChange.bind(this);
@@ -34,11 +35,10 @@ class CreateRoomType extends Component {
       .handleChange
       .bind(this);
     this.handleUpload = this.handleUpload.bind(this);
-    // this.onEditorStateChange = this.onEditorStateChange.bind(this);
   }
 
   initialState = {
-    id: '', titleRoomType: '', bedType: '', type: '', size: '', pets: '', breakfast: '', television: '', bath: '', amount: '', adults: '', children: '', description: '', coverPhotoURL: '', price: ''
+    id: '', titleRoomType: '', bedType: '', type: '', size: '', pets: '', breakfast: '', television: '', bath: '', amount: '', adults: '', children: '', description: '', coverPhotoURL: '', price: '', confirm: ''
   };
 
   handleChange = e => {
@@ -78,6 +78,22 @@ class CreateRoomType extends Component {
     }
     this.findAllTypes();
     this.findAllBeds();
+    this.findAllConfirms();
+  }
+
+
+  findAllConfirms = () => {
+    axios.get("http://localhost:8080/api/test/roomtypes/confirms")
+    .then(response => response.data)
+    .then((data) => {
+      this.setState({
+        confirms: [{ value: '', display: 'Select Confirm' }]
+          .concat(data.map(confirm => {
+            return { value: confirm, display: confirm }
+          }))
+      });
+    });
+
   }
 
   findAllTypes = () => {
@@ -126,6 +142,7 @@ class CreateRoomType extends Component {
           bath: roomType.bath,
           description: roomType.description,
           coverPhotoURL: roomType.coverPhotoURL,
+          confirm: roomType.confirm,
           price: roomType.price
         });
       }
@@ -153,6 +170,7 @@ class CreateRoomType extends Component {
       bath: this.state.bath,
       price: this.state.price,
       description: this.state.description,
+      confirm: this.state.confirm,
       coverPhotoURL: this.state.coverPhotoURL
     };
 
@@ -186,6 +204,7 @@ class CreateRoomType extends Component {
       bath: this.state.bath,
       price: this.state.price,
       description: this.state.description,
+      confirm: this.state.confirm,
       coverPhotoURL: this.state.coverPhotoURL
     };
     this.props.updateRoomType(roomType);
@@ -205,11 +224,6 @@ class CreateRoomType extends Component {
     });
   };
 
-  onEditorStateChange = (description) => {
-    this.setState({
-      description
-    })
-  }
   handleCheckPets = event => {
     this.setState({ pets: event.target.checked });
   }
@@ -231,7 +245,7 @@ class CreateRoomType extends Component {
   };
 
   render() {
-    const { titleRoomType, bedType, type, size, amount, adults, children, description, coverPhotoURL, price } = this.state;
+    const { titleRoomType, bedType, type, size, amount, adults, children, description, coverPhotoURL, price, confirm } = this.state;
     const style = {
       height: '60vh',
       display: 'flex',
@@ -364,14 +378,22 @@ class CreateRoomType extends Component {
                     value={description} onChange={this.roomTypeChange}
                     className={"form-control"}
                     placeholder="Enter Description" /> */}
-                    <Editor
-                    value={description} 
-                    toolbarClassName="toolbarClassName"
-                    wrapperClassName="wrapperClassName"
-                    editorClassName="editorClassName"
-                    onChange={this.roomTypeChange}
-                  />
-                  {/* <textarea disabled value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}></textarea> */}
+            <Editor />
+                </Form.Group>
+              </Form.Row>
+              <Form.Row>
+              <Form.Group as={Col} controlId="formGridConfirm">
+                  <Form.Label>Confirm</Form.Label>
+                  <Form.Control required as="select"
+                    form onChange={this.roomTypeChange}
+                    name="confirm" value={confirm}
+                    className={"form-control"}>
+                    {this.state.confirms.map(confirm =>
+                      <option key={confirm.value} value={confirm.value}>
+                        {confirm.display}
+                      </option>
+                    )}
+                  </Form.Control>
                 </Form.Group>
               </Form.Row>
               <div className="form-group">

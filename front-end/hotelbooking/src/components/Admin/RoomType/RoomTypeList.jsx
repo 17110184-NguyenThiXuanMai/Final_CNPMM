@@ -32,7 +32,7 @@ class RoomTypeList extends Component {
 
     findAllRoomTypes(currentPage) {
         currentPage -= 1;
-        axios.get("http://localhost:8080/api/test/roomtypes?pageNumber=" + currentPage + "&pageSize=" + this.state.roomTypesPerPage + "&sortBy=price&sortDir=" + this.state.sortDir)
+        axios.get("http://localhost:8080/api/test/roomtypes/admin?pageNumber=" + currentPage + "&pageSize=" + this.state.roomTypesPerPage + "&sortBy=price&sortDir=" + this.state.sortDir)
             .then(response => response.data)
             .then((data) => {
                 this.setState({
@@ -190,6 +190,7 @@ class RoomTypeList extends Component {
                                             <table className="table my-3">
                                                 <thead>
                                                     <tr>
+                                                        <th>Confirm</th>
                                                         <th>Title Room Type</th>
                                                         <th>Bed Type</th>
                                                         <th>Type</th>
@@ -212,7 +213,9 @@ class RoomTypeList extends Component {
                                                                 <td colSpan="12">No RoomTypes Available.</td>
                                                             </tr> :
                                                             roomTypes.map((roomType) => (
+                                                                
                                                                 <tr key={roomType.id}>
+                                                                    <td>{roomType.confirm}</td>
                                                                     <td>
                                                                         <Image src={roomType.coverPhotoURL} rounded width="100" height="100" /> &nbsp; {roomType.titleRoomType}
                                                                     </td>
@@ -228,6 +231,7 @@ class RoomTypeList extends Component {
                                                                     <td> {this.checkRoomType(roomType.breakfast)}</td>
                                                                     <td> {this.checkRoomType(roomType.television)}</td>
                                                                     <td> {this.checkRoomType(roomType.bath)}</td>
+                                                                    
                                                                     <td>
                                                                         <ul className="list-inline m-0">
                                                                             <li className="list-inline-item">
