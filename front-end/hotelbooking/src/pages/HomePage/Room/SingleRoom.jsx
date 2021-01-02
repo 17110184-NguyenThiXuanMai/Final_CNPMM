@@ -1,32 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { saveRoomType, fetchRoomType, updateRoomType } from '../../../services/index';
+import { fetchRoomType } from '../../../services/index';
 import Banner from '../../../components/HomePage/Room/Banner';
-import defaultBcg from '../../../images/room-1.jpeg'
 import { Link } from 'react-router-dom'
-import { RoomContext } from '../../../context'
 import StyledHero from '../../../components/HomePage/Room/StyledHero';
 import axios from 'axios';
-import '../../../css/main.css'
+import './booking.css';
+import { Image } from 'react-bootstrap';
 
 class SingleRoom extends Component {
     constructor(props) {
         super(props);
-        this.state = this.initialState;
         this.state = {
             roomTypes: [],
             type: [],
             show: false,
-            defaultBcg
         };
         this.roomTypeChange = this.roomTypeChange.bind(this);
-        this.submitRoomType = this.submitRoomType.bind(this);
     }
-
-    initialState = {
-        id: '', titleRoomType: '', slug: '', type: '', size: '', amount: '', capacity: '', pets: '', breakfast: '', television: '', bath: '', description: '', coverPhotoURL: '', price: ''
-    };
-    static contextType = RoomContext;
 
     componentDidMount() {
         const roomTypeId = +this.props.match.params.id;
@@ -34,6 +25,12 @@ class SingleRoom extends Component {
             this.findRoomTypeById(roomTypeId);
         }
         this.findAllTypes();
+        axios.get("http://localhost:8080/api/test/roomtypes/findallnotpageable")
+            .then((data) => {
+                this.setState({
+                    roomTypes: data.data
+                });
+            });
     }
 
     findAllTypes = () => {
@@ -74,69 +71,6 @@ class SingleRoom extends Component {
         }, 1000);
     };
 
-    resetRoomType = () => {
-        this.setState(() => this.initialState);
-    };
-
-    submitRoomType = event => {
-        event.preventDefault();
-        const roomType = {
-            titleRoomType: this.state.titleRoomType,
-            slug: this.state.slug,
-            type: this.state.type,
-            size: this.state.size,
-            amount: this.state.amount,
-            capacity: this.state.capacity,
-            pets: this.state.pets,
-            breakfast: this.state.breakfast,
-            price: this.state.price,
-            television: this.state.television,
-            bath: this.state.bath,
-            description: this.state.description,
-            coverPhotoURL: this.state.coverPhotoURL
-        };
-        this.props.saveRoomType(roomType);
-        setTimeout(() => {
-            if (this.props.savedRoomTypeObject.roomType != null) {
-                this.setState({ "show": true, "method": "post" });
-                setTimeout(() => this.setState({ "show": false }), 3000);
-            } else {
-                this.setState({ "show": false });
-            }
-        }, 2000);
-
-        this.setState(this.initialState);
-    };
-
-    updateRoomType = event => {
-        event.preventDefault();
-        const roomType = {
-            titleRoomType: this.state.titleRoomType,
-            slug: this.state.slug,
-            type: this.state.type,
-            size: this.state.size,
-            amount: this.state.amount,
-            capacity: this.state.capacity,
-            pets: this.state.pets,
-            breakfast: this.state.breakfast,
-            price: this.state.price,
-            television: this.state.television,
-            bath: this.state.bath,
-            description: this.state.description,
-            coverPhotoURL: this.state.coverPhotoURL
-        };
-        this.props.updateRoomType(roomType);
-        setTimeout(() => {
-            if (this.props.updatedRoomTypeObject.roomType != null) {
-                this.setState({ "show": true, "method": "put" });
-                setTimeout(() => this.setState({ "show": false }), 3000);
-            } else {
-                this.setState({ "show": false });
-            }
-        }, 2000);
-        this.setState(this.initialState);
-    };
-
     roomTypeChange = event => {
         this.setState({
             [event.target.name]: event.target.value
@@ -146,8 +80,8 @@ class SingleRoom extends Component {
     roomTypeList = () => {
         return this.props.history.push("/admin");
     };
-    static contextType = RoomContext;
     render() {
+        const { roomTypes } = this.state;
         return (
             <div>
                 <StyledHero img={this.state.coverPhotoURL}>
@@ -157,45 +91,96 @@ class SingleRoom extends Component {
                          </Link>
                     </Banner>
                 </StyledHero>
-                <section className="single-room">
-                    <div className="single-room-info">
-                        <article className="desc">
-                            <h3>details</h3>
-                            <h4>{this.state.description}</h4>
-                        </article>
-                        <article className="info">
-                            <h3>info</h3>
-                            <h6>price : ${this.state.price}  </h6>
-                            <h6>size : ${this.state.size} SQFT</h6>
-                            <h6>Amount: {this.state.amount} room</h6>
-                            <h6>Type: {this.state.type} </h6>
-                            <h6>
-                                max capacity : {
-                                    this.state.capacity > 1 ? `${this.state.capacity} people` :
-                                        `${this.state.capacity} person `}
-                            </h6>
-                            <h6> {this.state.pets ? "pets allowed" : "no pets allowed"}</h6>
-                            <h6>{this.state.breakfast && "free breakfast included"}</h6>
-                            <h6>{this.state.television ? "have television" : "have not television"}</h6>
-                            <h6>{this.state.bath ? "have bath" : "have not bath"}</h6>
-                        </article>
-                    </div>
-                </section>
-                <section className="room-extras">
-                    {/* <h3>Extras</h3>
-                     <ul className="extras">
-                         {extras.map((item, index) => {
-                            return <li key={index}>- {item}</li>
-                        })}
-                    </ul> */}
-                    <div className="p-4 clearfix">
+                <div className="booking">
+                    <div className="container">
                         <div className="row">
-                            <div className="col-md-3 col-12 ml-auto">
-                                <Link to={`/booknow/${this.state.id}`} className="btn btn-outline-primary btn-block btn-lg float-right ">Book Now</Link>
+                            <div className="col">
+                                <div className="booking_title text-center"><h2>Book a room</h2></div>
+                                <div className="booking_text text-center">
+                                    <p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Suspendisse nec faucibus velit. Quisque eleifend orci ipsum, a bibendum lacus suscipit sit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Suspendisse nec faucibus velit. Quisque eleifend orci ipsum, a bibendum lacus suscipit sit.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
+                <div className="booking">
+                    <div className="container">
+                        <div className="row">
+                            {roomTypes.map((roomType) => (
+                                <div className="col-md-4 col-12 mx-auto" key={roomType.id}>
+                                    <div className="card border-0 shadow-lg">
+                                        <Image src={roomType.coverPhotoURL} alt="single room" height="300" width="400" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className="booking">
+                    <div className="details">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-xl-7 col-lg-6">
+                                    <div className="details_image">
+                                        <Image src={this.state.coverPhotoURL} alt="single room" className="background_image" />
+                                    </div>
+                                </div>
+                                <div className="col-xl-5 col-lg-6">
+                                    <div className="details_content">
+                                        <div className="details_title">{this.state.titleRoomType} Room</div>
+                                        <div className="details_list">
+                                            <ul>
+                                                <li>Price : ${this.state.price}</li>
+                                                <li>Size : {this.state.size} SQFT</li>
+                                                <li>Amount: {this.state.amount}</li>
+                                                <li>Type: {this.state.type}</li>
+                                                <li>Adults: {this.state.adults}</li>
+                                                <li>Children: {this.state.children}</li>
+                                                <li>{this.state.pets ? "Pets allowed" : "No pets allowed"}</li>
+                                                <li>{this.state.breakfast && "Free breakfast included"}</li>
+                                                <li>{this.state.television ? "Have television" : "Have not television"}</li>
+                                                <li>{this.state.bath ? "Have bath" : "Have not bath"}</li>
+                                            </ul>
+                                        </div>
+                                        <div className="details_long_list">
+                                            <ul className="d-flex flex-row align-items-start justify-content-start flex-wrap">
+                                                <li>Balcony</li>
+                                                <li>Mountain view</li>
+                                                <li>Terrace</li>
+                                                <li>TV</li>
+                                                <li>Satellite Channels</li>
+                                                <li>Safety Deposit Box</li>
+                                                <li>Heating</li>
+                                                <li>Sofa</li>
+                                                <li>Tile/Marble floor</li>
+                                                <li>Mosquito net</li>
+                                                <li>Wardrobe/Closet</li>
+                                                <li>Sofa bed</li>
+                                                <li>Shower</li>
+                                                <li>Hairdryer</li>
+                                                <li>Free toiletries</li>
+                                                <li>Toilet</li>
+                                                <li>Bath or Shower</li>
+                                                <li>Toilet paper</li>
+                                                <li>Tea/Coffee Maker</li>
+                                                <li>Minibar</li>
+                                                <li>Dining area</li>
+                                                <li>Electric kettle</li>
+                                                <li>Dining table</li>
+                                                <li>Outdoor furniture</li>
+                                                <li>Outdoor dining area</li>
+                                                <li>Towels</li>
+                                                <li>Linen</li>
+                                                <li>Upper floors accessible by lift</li>
+                                            </ul>
+                                        </div>
+                                        <div className="book_now_button"><Link to={`/booknow/${this.state.id}`}>Book Now</Link></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -203,122 +188,14 @@ class SingleRoom extends Component {
 
 const mapStateToProps = state => {
     return {
-        savedRoomTypeObject: state.roomType,
-        roomTypeObject: state.roomType,
-        updatedRoomTypeObject: state.roomType
+        roomTypeObject: state.roomType
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        saveRoomType: (roomType) => dispatch(saveRoomType(roomType)),
-        fetchRoomType: (roomTypeId) => dispatch(fetchRoomType(roomTypeId)),
-        updateRoomType: (roomType) => dispatch(updateRoomType(roomType))
+        fetchRoomType: (roomTypeId) => dispatch(fetchRoomType(roomTypeId))
     };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleRoom);
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { Component } from 'react';
-// import defaultBcg from '../../images/room-1.jpeg'
-// import Banner from '../../components/HomePages/Banner'
-// import {Link} from 'react-router-dom'
-// import {RoomContext} from '../../context'
-// import StyledHero from '../../components/HomePages/StyledHero';
-
-// export default class SingleRoom extends Component {
-//     constructor(props) {
-//         super(props)
-//         // console.log(this.props)
-//         this.state = {
-//             slug: this.props.match.params.id,
-//             defaultBcg,
-//         }
-//     }
-//     // componentDidMount() {
-//     // }
-
-//     static contextType = RoomContext;
-
-//     render() {
-//             const { getRoom} = this.context;
-//             const room = getRoom(this.state.slug);
-//             if(!room) {
-//                 return <div className="error">
-//                     <h3>no such room could be found...</h3>
-//                     <Link to='/rooms' className="btn-primary">
-//                         back to rooms
-//                     </Link>
-//                 </div>
-//             }
-//             const {name, description, capacity, size, price, extras, 
-//             breakfast, pets, images } = room;
-
-//             const [mainImg,...defaultImg] = images;
-
-//             return (
-//                 <>
-//                 <StyledHero img={mainImg || this.state.defaultBcg}>
-
-//                     <Banner title={`${name} room`}>
-//                         <Link to="/rooms" className="btn-primary">
-//                             back to rooms
-//                         </Link> 
-//                     </Banner>
-//                 </StyledHero>
-//                 <section className="single-room">
-//                     <div className="single-room-images">
-//                         {defaultImg.map((item, index) => {
-//                             return <img key={index} src={item} alt={name} />;
-//                         })}
-//                     </div>
-//                     <div className="single-room-info">
-//                         <article className="desc">
-//                             <h3>details</h3>
-//                             <p>{description}</p>
-//                         </article>
-//                         <article className="info">
-//                             <h3>info</h3>
-//                             <h6>price : ${this.state.roomType.priceDaily}</h6>
-//                             <h6>size : ${size} SQFT</h6>
-//                             <h6>
-//                                 max capacity : {
-//                                     capacity > 1 ? `${capacity} people` : 
-//                                     `${capacity} person `}
-//                             </h6>
-
-//                                 <h6> {pets?"pets allowed":"no pets allowed"}</h6>
-//                                 <h6>{breakfast && "free breakfast included"}</h6>
-//                         </article>
-//                     </div>
-//                 </section>
-//                 <section className="room-extras">
-//                     <h3>Extras</h3>
-//                     <ul className="extras">
-//                         {extras.map((item, index) => {
-//                             return <li key={index}>- {item}</li>
-//                         })}
-//                     </ul>
-//                     <div className="p-4 clearfix">
-//                     <div className="row">
-//                        <div className="col-md-3 col-12 ml-auto">
-//                           <Link to={`/booknow/${this.state.slug}`} className="btn btn-outline-primary btn-block btn-lg float-right ">Book Now</Link>
-//                        </div>
-//                     </div>
-//                 </div>
-//                 </section>
-//                 </>
-//             );
-//     }
-// }

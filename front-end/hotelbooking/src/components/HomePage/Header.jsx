@@ -60,6 +60,9 @@ export default class Header extends Component {
                         <a href="/policy">Policy</a>
                     </li>
                     <li>
+                        <a href="/photo">Photo Library</a>
+                    </li>
+                    <li>
                         <a href="/review">Review</a>
                     </li>
                     <li>

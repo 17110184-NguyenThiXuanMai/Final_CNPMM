@@ -1,17 +1,11 @@
-import React, { Component, useState } from 'react'
+import React, { Component} from 'react'
 import { connect } from 'react-redux';
 import { saveRoomType, fetchRoomType, updateRoomType } from '../../../services/index';
-import { Card, Form, Button, Col, InputGroup, Image, Row } from 'react-bootstrap';
+import { Card, Form, Col, InputGroup } from 'react-bootstrap';
 import MyToast from '../../../components/Admin/MyToast';
 import axios from 'axios';
 import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill } from "react-icons/bs";
 import { storage } from "../../../firebase/firebase";
-// import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-// import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
-// import renderHTML from 'react-render-html';
-// import _ from 'lodash';
-import Editor from './Editor'
 
 class CreateRoomType extends Component {
   constructor(props) {
@@ -81,7 +75,6 @@ class CreateRoomType extends Component {
     this.findAllConfirms();
   }
 
-
   findAllConfirms = () => {
     axios.get("http://localhost:8080/api/test/roomtypes/confirms")
     .then(response => response.data)
@@ -93,7 +86,6 @@ class CreateRoomType extends Component {
           }))
       });
     });
-
   }
 
   findAllTypes = () => {
@@ -316,14 +308,6 @@ class CreateRoomType extends Component {
                       <br />
                       <img src={this.state.coverPhotoURL || 'http://via.placeholder.com/400x300'} alt="Uploaded images" height="300" width="400" />
                     </div>
-                    {/* <Form.Control required autoComplete="off"
-                      type="test" name="coverPhotoURL"
-                      value={coverPhotoURL} onChange={this.roomTypeChange}
-                      className={"form-control"}
-                      placeholder="Enter Room Type Cover Photo URL" /> */}
-                    {/* <InputGroup.Append>
-                      {this.state.coverPhotoURL !== '' && <Image src={this.state.coverPhotoURL} roundedRight width="40" height="38" />}
-                    </InputGroup.Append> */}
                   </InputGroup>
                 </Form.Group>
                 <Form.Group as={Col} controlId="formGridTitle">
@@ -373,12 +357,11 @@ class CreateRoomType extends Component {
               <Form.Row>
               <Form.Group as={Col} controlId="formGridDescription">
                   <Form.Label>Description</Form.Label>
-                  {/* <Form.Control required autoComplete="off"
+                  <Form.Control required autoComplete="off"
                     type="test" name="description"
                     value={description} onChange={this.roomTypeChange}
                     className={"form-control"}
-                    placeholder="Enter Description" /> */}
-            <Editor />
+                    placeholder="Enter Description" />
                 </Form.Group>
               </Form.Row>
               <Form.Row>

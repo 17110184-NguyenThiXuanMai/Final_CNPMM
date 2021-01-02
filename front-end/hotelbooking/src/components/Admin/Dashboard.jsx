@@ -7,7 +7,7 @@ export default class Dashboard extends Component {
                 <div className="slide">
                     <div className="row">
                         <div className="container">
-                            <h1>Welcome Admin Pages</h1>
+                        <h1 className="text-center mt-5">Welcome to Admin Site!</h1>
                         </div>
                     </div>
                 </div>

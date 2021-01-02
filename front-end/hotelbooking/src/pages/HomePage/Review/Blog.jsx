@@ -162,74 +162,10 @@ export default class Blog extends Component {
 
 								</div>
 							</div>
-							{/* 
-				<div className="col-lg-3">
-					<div className="sidebar">
-						<div className="sidebar_search">
-							<form action="#" className="sidebar_search_form" id="sidebar_saerch_form">
-								<input type="text" className="sidebar_search_input" placeholder="Keyword" required="required" />
-								<button className="sidebar_search_button">Search</button>
-							</form>
-						</div>
-
-						<div className="recent_posts">
-							<div className="sidebar_title"><h4>Recent Posts</h4></div>
-							<div className="sidebar_list">
-								<ul>
-									<li><a href="#">Featured Product</a></li>
-									<li><a href="#">Standard Post</a></li>
-									<li><a href="#">Gallery Post</a></li>
-									<li><a href="#">Video Post</a></li>
-									<li><a href="#">Audio Post</a></li>
-								</ul>
-							</div>
-						</div>
-
-						<div className="categories">
-							<div className="sidebar_title"><h4>Categories</h4></div>
-							<div className="sidebar_list">
-								<ul>
-									<li><a href="#">News</a></li>
-									<li><a href="#">Hotel</a></li>
-									<li><a href="#">Vacation</a></li>
-								</ul>
-							</div>
-						</div>
-
-						<div className="tags">
-							<div className="sidebar_title"><h4>Tags</h4></div>
-							<div className="tags_container">
-								<ul className="d-flex flex-row align-items-start justify-content-start flex-wrap">
-									<li><a href="#">news</a></li>
-									<li><a href="#">hotel</a></li>
-									<li><a href="#">vacation</a></li>
-									<li><a href="#">reservation</a></li>
-									<li><a href="#">booking</a></li>
-									<li><a href="#">video</a></li>
-									<li><a href="#">clients</a></li>
-									<li><a href="#">reviews</a></li>
-									<li><a href="#">destinations</a></li>
-									<li><a href="#">swimming pool</a></li>
-								</ul>
-							</div>
-						</div>
-						<div className="special_offer">
-							<div className="background_image" ></div>
-							<div className="special_offer_container text-center">
-								<div className="special_offer_title">Special Offer</div>
-								<div className="special_offer_subtitle">Family Room</div>
-								<div className="button special_offer_button"><a href="#">Book now</a></div>
-							</div>
-						</div>
-
-					</div>
-				</div> */}
 						</div>
 					</div>
 				</div>
-
 			</div>
-
 		)
 	}
 }

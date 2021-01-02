@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { BsFillHouseFill, BsLockFill } from "react-icons/bs";
-import { BiRestaurant } from "react-icons/bi";
 
 export default class Sidebar extends Component {
   render() {
@@ -43,10 +42,14 @@ export default class Sidebar extends Component {
               <i className="zmdi zmdi-grid"></i> <span> Discount </span>
             </Link>
           </li>
-
           <li>
-            <Link exact to="/admin/bookings">
+            <Link exact to="/admin/booking">
               <i className="zmdi zmdi-grid"></i> <span> Book List </span>
+            </Link>
+          </li>
+          <li>
+            <Link exact to="/admin/photo">
+              <i className="zmdi zmdi-grid"></i> <span> Photo Library </span>
             </Link>
           </li>
           <li>

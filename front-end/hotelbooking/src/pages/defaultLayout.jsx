@@ -14,8 +14,8 @@ import Blog from '../pages/HomePage/Review/Blog'
 import Contact from '../pages/HomePage/Contact/Contact'
 import AboutUs from '../pages/HomePage/About/AboutUs'
 import PrivateRoute from '../PrivateRoute';
-import RestaurantContainer from '../components/HomePage/Booknow/RestaurantContainer'
-import Editor from '../components/Admin/RoomType/Editor'
+import ListImage from './HomePage/LitsImage'
+import Booknow from './HomePage/Booknow/Booknow'
 
 export default class DefaultLayout extends Component {
     render() {
@@ -33,11 +33,11 @@ export default class DefaultLayout extends Component {
                             <Provider store={store}>
                                 <Route exact path="/rooms/" component={Rooms} />
                                 <Route exact path="/rooms/:id" component={SingleRoom} />
-                                <PrivateRoute exact path="/booknow/:id" component={RestaurantContainer} />
+                                <PrivateRoute exact path="/booknow/:id" component={Booknow} />
                                 <Route exact path="/review/" component={Blog} />
                                 <Route exact path="/contact/" component={Contact} />
                                 <Route exact path="/about/" component={AboutUs} />
-                                <Route path="/editor/" component={Editor} />
+                                <Route path="/photo" component={ListImage} />
                             </Provider>
                         </div>
                     </body>

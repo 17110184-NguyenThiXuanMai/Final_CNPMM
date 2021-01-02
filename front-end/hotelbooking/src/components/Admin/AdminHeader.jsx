@@ -13,7 +13,6 @@ export default class AdminHeader extends Component {
   constructor(props) {
     super(props);
     this.logOut = this.logOut.bind(this);
-
     this.state = {
       showAdminBoard: false,
       currentUser: undefined,
@@ -63,15 +62,6 @@ export default class AdminHeader extends Component {
               <a className="nav-link dropdown-toggle dropdown-toggle-nocaret waves-effect" data-toggle="dropdown" href="javascript:void();">
                 <i className="fa fa-bell-o"></i></a>
             </li>
-            <li className="nav-item language">
-              <a className="nav-link dropdown-toggle dropdown-toggle-nocaret waves-effect" data-toggle="dropdown" href="javascript:void();"><i className="fa fa-flag"></i></a>
-              <ul className="dropdown-menu dropdown-menu-right">
-                <li className="dropdown-item"> <i className="flag-icon flag-icon-gb mr-2"></i> English</li>
-                <li className="dropdown-item"> <i className="flag-icon flag-icon-fr mr-2"></i> French</li>
-                <li className="dropdown-item"> <i className="flag-icon flag-icon-cn mr-2"></i> Chinese</li>
-                <li className="dropdown-item"> <i className="flag-icon flag-icon-de mr-2"></i> German</li>
-              </ul>
-            </li>
             <li className="nav-item">
               <a className="nav-link dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown" href="#">
                 <span className="user-profile"><img src="https://via.placeholder.com/110x110" className="img-circle" alt="user avatar" /></span>
@@ -107,7 +97,6 @@ export default class AdminHeader extends Component {
                             <h6 className="mt-2 user-title">
                               <Link to={"/login"}>Login</Link>
                             </h6>
-                            {/* <p className="user-subtitle">mccoy@example.com</p> */}
                           </div>
                         </div>
                       </a>

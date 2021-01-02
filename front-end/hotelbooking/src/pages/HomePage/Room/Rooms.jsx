@@ -11,7 +11,7 @@ const Rooms = () => {
                 <Banner title="Available Rooms" subtitle="Best in Class Room">
                     <Link to='/' className="btn-primary">
                         return home
-            </Link>
+                    </Link>
                 </Banner>
             </Hero>
             <RoomContainer />

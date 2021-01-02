@@ -10,10 +10,8 @@ import AdminProfile from './Admin/AdminProfile';
 import Services from '../components/Admin/Services/Services';
 import ServicesList from '../components/Admin/Services/ServicesList';
 import Dashboard from '../components/Admin/Dashboard';
-import CustomerDetail from '../components/HomePage/Booknow/CustomerDetail';
-import BookingList from '../components/HomePage/Booknow/BookingList';
-import BookingDetail from '../components/HomePage/Booknow/BookingDetail';
-import CustomerList from '../components/HomePage/Booknow/CustomerList';
+import AdminListImage from '../pages/Admin/AdminListImage'
+import BookingList from '../components/Admin/Booking/BookingList'
 
 export default class adminDefaultLayout extends Component {
 
@@ -36,18 +34,8 @@ export default class adminDefaultLayout extends Component {
                   <Route path="/admin/serviceslist" exact component={ServicesList} />
                   <Route path="/admin/addservices" exact component={Services} />
                   <Route path="/admin/editservices/:id" exact component={Services} />
-                  <Route exact path="/admin/customers"
-                    render={() =>
-                      <>
-                        <CustomerList customers={this.state.customers} onCustomerSelected={this.selectCustomer.bind(this)} />
-                        <CustomerDetail customer={this.state.selectedCustomer} />
-                      </> } />
-                  <Route exact path="/admin/bookings"
-                    render={() =>
-                      <>
-                        <BookingList bookingsData={this.state.bookings} onBookingSelected={this.selectBooking.bind(this)} />
-                        <BookingDetail booking={this.state.selectedBooking} />
-                      </>} />
+                  <Route path="/admin/photo" exact component={AdminListImage} />
+                  <Route path="/admin/booking" exact component={BookingList} />
                 </Provider>
               </Switch>
             </div>

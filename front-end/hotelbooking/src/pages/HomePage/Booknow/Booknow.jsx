@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 import { saveRoomType, fetchRoomType, updateRoomType } from '../../../services/index';
-import moment from 'moment';
 import DatePicker from "react-datepicker";
 import { Link } from 'react-router-dom'
 import { RoomContext } from '../../../context'
 import axios from 'axios';
 import "../../../css/main.css"
 import "react-datepicker/dist/react-datepicker.css";
-import CustomerForm from '../../../components/HomePage/Booknow/CustomerForm'
-import BookingForm from '../../../components/HomePage/Booknow/BookingForm'
-import CustomerList from '../../../components/HomePage/Booknow/CustomerList';
-import CustomerDetail from '../../../components/HomePage/Booknow/CustomerDetail';
 
 class Booknow extends Component {
     constructor(props) {
@@ -24,32 +18,12 @@ class Booknow extends Component {
             endDate: '',
             selectedRoomType: [],
         };
-        this.state = {
-            todayBookings: [],
-            bookings: [],
-            customers: [],
-            selectedBooking: {
-                customer: {},
-            },
-            selectedCustomer: {
-                bookings: [{}]
-            },
-        };
         this.roomTypeChange = this.roomTypeChange.bind(this);
         this.onBookingSubmit = this.onBookingSubmit.bind(this);
         this.onCustomerSubmit = this.onCustomerSubmit.bind(this);
         this.handleChangeEnd = this.handleChangeEnd.bind(this);
         this.handleChangeStart = this.handleChangeStart.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    customerOptions() {
-        const customerOptions = this.props.customers.map((customer) => {
-            return (
-                <option value={customer.id} key={customer.id}>{customer.name}</option>
-            );
-        });
-        return customerOptions;
     }
 
     initialState = {
@@ -63,40 +37,6 @@ class Booknow extends Component {
             this.findRoomTypeById(roomTypeId);
         }
         this.findAllTypes();
-        const today = new Date()
-        const year = today.getFullYear()
-        const month = `${today.getMonth() + 1}`.padStart(2, 0)
-        const day = `${today.getDate()}`.padStart(2, 0)
-        const stringDate = [year, month, day].join("-")
-    
-        this.fetchData(`http://localhost:8080/api/test/bookings/date/${stringDate}`, bookings => {
-            this.setState({ todayBookings: bookings });
-        });
-
-        this.fetchData("http://localhost:8080/api/test/bookings", bookings => {
-            let newBookings = bookings._embedded.bookings;
-            this.setState({ bookings: newBookings });
-        });
-        this.fetchData("http://localhost:8080/api/test/customers", customers => {
-            this.setState({ customers: customers._embedded.customers });
-        });
-        this.fetchData("http://localhost:8080/api/test/transactions", transactions => {
-            this.setState({ transactions: transactions._embedded.transactions });
-        });
-        this.fetchData(
-            "http://localhost:8080/api/test/restaurant-tables",
-            restaurantTables => {
-                this.setState({ restaurantTables: restaurantTables });
-            }
-        );
-        this.fetchData(
-            `http://localhost:8080/api/test/restaurant-tables/availableondate/${stringDate}`,
-            restaurantTables => {
-                this.setState({ restaurantTablesOnDate: restaurantTables });
-                this.setState({ dateChosen: stringDate })
-                console.log('date chosen', stringDate);
-            }
-        );
     }
 
     handleChangeStart(date) {
@@ -108,11 +48,6 @@ class Booknow extends Component {
         this.setState({
             endDate: date
         });
-    }
-    calculateDaysLeft(startDate, endDate) {
-        if (!moment.isMoment(startDate)) startDate = moment(startDate);
-        if (!moment.isMoment(endDate)) endDate = moment(endDate);
-        return endDate.diff(startDate, "days");
     }
 
     findAllTypes = () => {
@@ -187,71 +122,6 @@ class Booknow extends Component {
         })
     }
 
-    fetchData(url, callback) {
-        fetch(url, {
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                "Access-Control-Allow-Origin": "http://localhost:3000"
-            }
-        })
-            .then(res => res.json())
-            .then(callback)
-            .catch(error => {
-                console.error(error);
-            });
-    }
-
-    onCustomerSubmit(payload) {
-        fetch('http://localhost:8080/api/test/customers', {
-            mode: "cors",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                "Access-Control-Allow-Origin": "http://localhost:3000"
-            },
-            body: JSON.stringify(payload)
-        })
-            .then(res => res.json())
-            .then(res => {
-                let customers = [...this.state.customers];
-                customers.push(res);
-                this.setState({ customers });
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-
-    onBookingSubmit(payload) {
-        fetch('http://localhost:8080/api/test/bookings', {
-            mode: "cors",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                "Access-Control-Allow-Origin": "http://localhost:3000"
-            },
-            body: JSON.stringify(payload)
-        })
-            .then(res => res.json())
-            .then(res => {
-                let bookings = [...this.state.bookings];
-                bookings.push(res);
-                this.setState({ bookings });
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-
-    selectCustomer(selectedIndex) {
-        const selectedCustomer = this.state.customers[selectedIndex];
-        this.setState({ selectedCustomer })
-    }
-
     render() {
         const { startDate, endDate } = this.state;
         const daysLeft = this.calculateDaysLeft(startDate, endDate);
@@ -266,18 +136,18 @@ class Booknow extends Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    <CustomerForm
+                                    {/* <CustomerForm
                                         onSubmit={this.onCustomerSubmit}
-                                    />
+                                    /> */}
                                 </div>
                                 <div className="col">
-                                    <BookingForm
+                                    {/* <BookingForm
                                         onSubmit={this.onBookingSubmit}
-                                        customers={this.state.customers} />
+                                        customers={this.state.customers} /> */}
                                 </div>
-                                <CustomerList customers={this.state.customers}
+                                {/* <CustomerList customers={this.state.customers}
                                     onCustomerSelected={this.selectCustomer.bind(this)} />
-                                <CustomerDetail customer={this.state.selectedCustomer} />
+                                <CustomerDetail customer={this.state.selectedCustomer} /> */}
                             </div>
                             <div className="row" onSubmit={this.handleSubmit}>
                                 <div className="col-md-6 col-12 my-auto">

@@ -22,10 +22,9 @@ export default function RoomsList({rooms}) {
        )
     }
     return (
-        <section className="roomslist">
-            <div className="roomslist-center">
-               <Room />;
-            </div>
+        <section className="container">
+            <Room />
         </section>
+  
     );
  }

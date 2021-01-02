@@ -1,13 +1,20 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { deleteService } from '../../../services/index';
+import { Card, Button, InputGroup, FormControl, Image } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import MyToast from '../MyToast';
+import axios from 'axios';
+import { BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft } from "react-icons/bs";
 
-class BookingList extends Component {
+class ServicesList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            roomTypes: [],
+            services: [],
             search: '',
             currentPage: 1,
-            roomTypesPerPage: 5,
+            policiesPerPage: 5,
             sortDir: "asc",
         };
     }
@@ -15,21 +22,21 @@ class BookingList extends Component {
     sortData = () => {
         setTimeout(() => {
             this.state.sortDir === "asc" ? this.setState({ sortDir: "desc" }) : this.setState({ sortDir: "asc" });
-            this.findAllRoomTypes(this.state.currentPage);
+            this.findAllServices(this.state.currentPage);
         }, 500);
     };
 
     componentDidMount() {
-        this.findAllRoomTypes(this.state.currentPage);
+        this.findAllServices(this.state.currentPage);
     }
 
-    findAllRoomTypes(currentPage) {
+    findAllServices(currentPage) {
         currentPage -= 1;
-        axios.get("http://localhost:8080/api/test/roomtypes?pageNumber=" + currentPage + "&pageSize=" + this.state.roomTypesPerPage + "&sortBy=price&sortDir=" + this.state.sortDir)
+        axios.get("http://localhost:8080/api/test/services?pageNumber=" + currentPage + "&pageSize=" + this.state.policiesPerPage + "&sortBy=title&sortDir=" + this.state.sortDir)
             .then(response => response.data)
             .then((data) => {
                 this.setState({
-                    roomTypes: data.content,
+                    services: data.content,
                     totalPages: data.totalPages,
                     totalElements: data.totalElements,
                     currentPage: data.number + 1
@@ -37,13 +44,13 @@ class BookingList extends Component {
             });
     };
 
-    deleteRoomType = (roomTypeId) => {
-        this.props.deleteRoomType(roomTypeId);
+    deleteService = (serviceId) => {
+        this.props.deleteService(serviceId);
         setTimeout(() => {
-            if (this.props.roomTypeObject != null) {
+            if (this.props.serviceObject != null) {
                 this.setState({ "show": true });
                 setTimeout(() => this.setState({ "show": false }), 3000);
-                this.findAllRoomTypes(this.state.currentPage);
+                this.findAllPolicies(this.state.currentPage);
             } else {
                 this.setState({ "show": false });
             }
@@ -55,7 +62,7 @@ class BookingList extends Component {
         if (this.state.search) {
             this.searchData(targetPage);
         } else {
-            this.findAllRoomTypes(targetPage);
+            this.findAllPolicies(targetPage);
         }
         this.setState({
             [event.target.name]: targetPage
@@ -68,7 +75,7 @@ class BookingList extends Component {
             if (this.state.search) {
                 this.searchData(firstPage);
             } else {
-                this.findAllRoomTypes(firstPage);
+                this.findAllPolicies(firstPage);
             }
         }
     };
@@ -79,28 +86,28 @@ class BookingList extends Component {
             if (this.state.search) {
                 this.searchData(this.state.currentPage - prevPage);
             } else {
-                this.findAllRoomTypes(this.state.currentPage - prevPage);
+                this.findAllPolicies(this.state.currentPage - prevPage);
             }
         }
     };
 
     lastPage = () => {
-        let condition = Math.ceil(this.state.totalElements / this.state.roomTypesPerPage);
+        let condition = Math.ceil(this.state.totalElements / this.state.policiesPerPage);
         if (this.state.currentPage < condition) {
             if (this.state.search) {
                 this.searchData(condition);
             } else {
-                this.findAllRoomTypes(condition);
+                this.findAllPolicies(condition);
             }
         }
     };
 
     nextPage = () => {
-        if (this.state.currentPage < Math.ceil(this.state.totalElements / this.state.roomTypesPerPage)) {
+        if (this.state.currentPage < Math.ceil(this.state.totalElements / this.state.policiesPerPage)) {
             if (this.state.search) {
                 this.searchData(this.state.currentPage + 1);
             } else {
-                this.findAllRoomTypes(this.state.currentPage + 1);
+                this.findAllPolicies(this.state.currentPage + 1);
             }
         }
     };
@@ -113,16 +120,16 @@ class BookingList extends Component {
 
     cancelSearch = () => {
         this.setState({ "search": '' });
-        this.findAllRoomTypes(this.state.currentPage);
+        this.findAllPolicies(this.state.currentPage);
     };
 
     searchData = (currentPage) => {
         currentPage -= 1;
-        axios.get("http://localhost:8080/api/test/roomtypes/search/" + this.state.search + "?page=" + currentPage + "&size=" + this.state.roomTypesPerPage)
+        axios.get("http://localhost:8080/api/test/services/search/" + this.state.search + "?page=" + currentPage + "&size=" + this.state.policiesPerPage)
             .then(response => response.data)
             .then((data) => {
                 this.setState({
-                    roomTypes: data.content,
+                    services: data.content,
                     totalPages: data.totalPages,
                     totalElements: data.totalElements,
                     currentPage: data.number + 1
@@ -131,10 +138,10 @@ class BookingList extends Component {
     };
 
     add = () => {
-        return this.props.history.push("/admin/addroomtypes");
+        return this.props.history.push("/admin/addservices");
     };
 
-    checkRoomType = (Code) => {
+    checkService = (Code) => {
         if (Code === true) {
             return (
                 <td className="text-center">
@@ -151,7 +158,7 @@ class BookingList extends Component {
     };
 
     render() {
-        const { roomTypes, currentPage, totalPages, search } = this.state;
+        const { services, currentPage, totalPages, search } = this.state;
         return (
             <div>
                 <div className="home">
@@ -159,16 +166,16 @@ class BookingList extends Component {
                         <div className="row">
                             <div className="col">
                                 <div style={{ "display": this.state.show ? "block" : "none" }}>
-                                    <MyToast show={this.state.show} message={"RoomType Deleted Successfully."} type={"danger"} />
+                                    <MyToast show={this.state.show} message={"Service Deleted Successfully."} type={"danger"} />
                                 </div>
                                 <div className="card">
                                     <div className="card-body">
                                         <div className="card-row">
-                                            <div className="card-title">Room Type Manage</div>
+                                            <div className="card-title">Booking List Manage</div>
                                             <div className="form-inline ml-auto mb-3">
                                                 <div className="md-form my-0">
                                                     <FormControl placeholder="Search" name="search" value={search}
-                                                        className={"form-control-2"}
+                                                        className={"form-control"}
                                                         onChange={this.searchChange}
                                                     />
                                                 </div>
@@ -179,100 +186,86 @@ class BookingList extends Component {
                                             </div>
                                             <button className="book_button float-right" onClick={this.add.bind()}> ADD</button>
                                         </div>
+
                                         <div className="table-responsive">
                                             <table className="table my-3">
-                                                <thead>
+                                                <thead className="">
                                                     <tr>
-                                                        <th>Title Room Type</th>
-                                                        <th>Slug</th>
-                                                        <th>Type</th>
-                                                        <th onClick={this.sortData}>Price <div className={this.state.sortDir === "asc" ? "arrow arrow-up" : "arrow arrow-down"}> </div></th>
+                                                        <th>Room Type</th>
+                                                        <th>Capacity</th>
                                                         <th>Size</th>
                                                         <th>Amount</th>
-                                                        <th>Capacity</th>
-                                                        <th>Description</th>
-                                                        <th>Pets</th>
-                                                        <th>Breakfast</th>
-                                                        <th>Television</th>
-                                                        <th>Bath</th>
+                                                        <th>From Date</th>
+                                                        <th>To Date</th>
+                                                        <th>Number of days</th>
+                                                        <th>Price</th>
+                                                        <th>Customer</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        roomTypes.length === 0 ?
+                                                        services.length === 0 ?
                                                             <tr align="center">
-                                                                <td colSpan="12">No RoomTypes Available.</td>
+                                                                <td colSpan="5">No Policies Available.</td>
                                                             </tr> :
-                                                            roomTypes.map((roomType) => (
-                                                                <tr key={roomType.id}>
-                                                                    <td>
-                                                                        <Image src={roomType.coverPhotoURL} rounded width="100" height="100" /> &nbsp; {roomType.titleRoomType}
+                                                                services.map((service) => (                                               
+                                                                <tr key={service.id}>
+                                                                    <td>{service.title}</td>
+                                                                    <td>{service.type}</td>
+                                                                    <td colSpan="2">
+                                                                        <Image src={service.url} rounded width="100" height="100" />
                                                                     </td>
-                                                                    <td>{roomType.slug}</td>
-                                                                    <td>{roomType.type}</td>
-                                                                    <td>{roomType.price}</td>
-                                                                    <td>{roomType.size}</td>
-                                                                    <td>{roomType.amount}</td>
-                                                                    <td>{roomType.capacity}</td>
-                                                                    <td>{roomType.description}</td>
-                                                                    <td> {this.checkRoomType(roomType.pets)}</td>
-                                                                    <td> {this.checkRoomType(roomType.breakfast)}</td>
-                                                                    <td> {this.checkRoomType(roomType.television)}</td>
-                                                                    <td> {this.checkRoomType(roomType.bath)}</td>
+                                                                    <td>{service.description}</td>
                                                                     <td>
-                                                                        {/* <ButtonGroup>
-                                                                            <Link to={"/admin/editroomtype/" + roomType.id} className="btn btn-sm btn-outline-primary"><BsPencilSquare /></Link>{' '}
-                                                                            <Button size="sm" variant="outline-danger" onClick={this.deleteRoomType.bind(this, roomType.id)}><BsFillTrashFill /></Button>
-                                                                        </ButtonGroup> */}
                                                                         <ul className="list-inline m-0">
                                                                             <li className="list-inline-item">
-                                                                                <Link to={"/admin/editroomtype/" + roomType.id} className="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i className="fa fa-edit"></i></Link>
+                                                                                <Link to={"/admin/editservices/" + service.id} className="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i className="fa fa-edit"></i></Link>
                                                                             </li>
                                                                             <li className="list-inline-item">
-                                                                                <button onClick={this.deleteRoomType.bind(this, roomType.id)} className="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i className="fa fa-trash"></i></button>
+                                                                                <button onClick={this.deleteService.bind(this, service.id)} className="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i className="fa fa-trash"></i></button>
                                                                             </li>
                                                                         </ul>
                                                                     </td>
                                                                 </tr>
-                                                            ))
+                                                                ))
                                                     }
                                                 </tbody>
                                             </table>
-                                            <div className="card-body">
-                                                {roomTypes.length > 0 ?
-                                                    <Card.Footer>
-                                                        <div style={{ "float": "left" }}>
-                                                            Showing Page {currentPage} of {totalPages}
-                                                        </div>
-                                                        <div style={{ "float": "right" }}>
-                                                            <InputGroup size="sm">
-                                                                <InputGroup.Prepend>
-                                                                    <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
-                                                                        onClick={this.firstPage}> <BsChevronBarLeft />
-                                                                    First
-                                                                    </Button>
-                                                                    <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
-                                                                        onClick={this.prevPage}> <BsChevronLeft />
-                                                                    Prev
-                                                                    </Button>
-                                                                </InputGroup.Prepend>
-                                                                <FormControl className={"page-num"} name="currentPage" value={currentPage}
-                                                                    onChange={this.changePage} />
-                                                                <InputGroup.Append>
-                                                                    <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
-                                                                        onClick={this.nextPage}>
-                                                                        Next <BsChevronRight />
-                                                                    </Button>
-                                                                    <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
-                                                                        onClick={this.lastPage}> <BsChevronBarRight />
-                                                                        Last
-                                                                    </Button>
-                                                                </InputGroup.Append>
-                                                            </InputGroup>
-                                                        </div>
-                                                    </Card.Footer> : null
-                                                }
-                                            </div>
+                                        </div>
+                                        <div className="card-body">
+                                            {services.length > 0 ?
+                                                <Card.Footer>
+                                                    <div style={{ "float": "left" }}>
+                                                        Showing Page {currentPage} of {totalPages}
+                                                    </div>
+                                                    <div style={{ "float": "right" }}>
+                                                        <InputGroup size="sm">
+                                                            <InputGroup.Prepend>
+                                                                <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
+                                                                    onClick={this.firstPage}> <BsChevronBarLeft />
+                                                                First
+                                                                </Button>
+                                                                <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
+                                                                    onClick={this.prevPage}> <BsChevronLeft />
+                                                                Prev
+                                                                </Button>
+                                                            </InputGroup.Prepend>
+                                                            <FormControl className={"page-num bg-dark"} name="currentPage" value={currentPage}
+                                                                onChange={this.changePage} />
+                                                            <InputGroup.Append>
+                                                                <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
+                                                                    onClick={this.nextPage}>
+                                                                    Next <BsChevronRight />
+                                                                </Button>
+                                                                <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
+                                                                    onClick={this.lastPage}> <BsChevronBarRight />
+                                                                Last
+                                                                </Button>
+                                                            </InputGroup.Append>
+                                                        </InputGroup>
+                                                    </div>
+                                                </Card.Footer> : null
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -281,21 +274,20 @@ class BookingList extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 
-
 const mapStateToProps = state => {
     return {
-        roomTypeObject: state.roomType
+        serviceObject: state.service
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        deleteRoomType: (roomTypeId) => dispatch(deleteRoomType(roomTypeId))
+        deleteService: (serviceId) => dispatch(deleteService(serviceId))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BookingList);
+export default connect(mapStateToProps, mapDispatchToProps)(ServicesList);
