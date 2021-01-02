@@ -37,7 +37,7 @@ export default class DefaultLayout extends Component {
                                 <Route exact path="/review/" component={Blog} />
                                 <Route exact path="/contact/" component={Contact} />
                                 <Route exact path="/about/" component={AboutUs} />
-                                <Route path="/photo" component={ListImage} />
+                                <Route exact path="/photo" component={ListImage} />
                             </Provider>
                         </div>
                     </body>

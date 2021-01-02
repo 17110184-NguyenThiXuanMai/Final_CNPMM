@@ -46,7 +46,6 @@ export default class AdminProfile extends Component {
                           <h1>
                             {currentUser.username} Profile
                         </h1>
-                          <p className="proile-rating"></p>
                           <ul className="nav nav-tabs" id="myTab" role="tablist">
                             <li className="nav-item">
                               <a className="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
