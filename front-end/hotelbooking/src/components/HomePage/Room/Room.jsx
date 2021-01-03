@@ -14,7 +14,7 @@ class Room extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8080/api/test/roomtypes/findallnotpageable")
+        axios.get("http://localhost:8080/api/test/roomtypes/findallenableandnotpageable")
             .then((data) => {
                 this.setState({
                     roomTypes: data.data

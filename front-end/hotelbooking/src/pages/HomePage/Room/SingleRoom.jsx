@@ -16,7 +16,6 @@ class SingleRoom extends Component {
             type: [],
             show: false,
         };
-        this.roomTypeChange = this.roomTypeChange.bind(this);
     }
 
     componentDidMount() {
@@ -25,7 +24,7 @@ class SingleRoom extends Component {
             this.findRoomTypeById(roomTypeId);
         }
         this.findAllTypes();
-        axios.get("http://localhost:8080/api/test/roomtypes/findallnotpageable")
+        axios.get("http://localhost:8080/api/test/roomtypes/findallenableandnotpageablee")
             .then((data) => {
                 this.setState({
                     roomTypes: data.data
@@ -72,12 +71,6 @@ class SingleRoom extends Component {
         }, 1000);
     };
 
-    roomTypeChange = event => {
-        this.setState({
-            [event.target.name]: event.target.value
-        });
-    };
-
     roomTypeList = () => {
         return this.props.history.push("/admin");
     };
@@ -104,7 +97,7 @@ class SingleRoom extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="booking">
+                {/* <div className="booking">
                     <div className="container">
                         <div className="row">
                             {roomTypes.map((roomType) => (
@@ -116,7 +109,7 @@ class SingleRoom extends Component {
                             ))}
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="booking">
                     <div className="details">
                         <div className="container">

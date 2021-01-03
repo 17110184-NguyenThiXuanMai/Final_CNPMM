@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { deleteService } from '../../../services/index';
-import { Card, Button, InputGroup, FormControl, Image } from 'react-bootstrap';
+import { Card, Button, InputGroup, ButtonGroup, FormControl, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import MyToast from '../MyToast';
 import axios from 'axios';
-import { BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft } from "react-icons/bs";
+import { BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft, BsPencilSquare } from "react-icons/bs";
 
 class ServicesList extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -44,7 +43,7 @@ class ServicesList extends Component {
 
     findAllServices(currentPage) {
         currentPage -= 1;
-        axios.get("http://localhost:8080/api/test/services?pageNumber=" + currentPage + "&pageSize=" + this.state.policiesPerPage + "&sortBy=title&sortDir=" + this.state.sortDir)
+        axios.get("http://localhost:8080/api/test/services/admin?pageNumber=" + currentPage + "&pageSize=" + this.state.policiesPerPage + "&sortBy=title&sortDir=" + this.state.sortDir)
             .then(response => response.data)
             .then((data) => {
                 this.setState({
@@ -62,7 +61,7 @@ class ServicesList extends Component {
             if (this.props.serviceObject != null) {
                 this.setState({ "show": true });
                 setTimeout(() => this.setState({ "show": false }), 3000);
-                this.findAllPolicies(this.state.currentPage);
+                this.findAllServices(this.state.currentPage);
             } else {
                 this.setState({ "show": false });
             }
@@ -74,7 +73,7 @@ class ServicesList extends Component {
         if (this.state.search) {
             this.searchData(targetPage);
         } else {
-            this.findAllPolicies(targetPage);
+            this.findAllServices(targetPage);
         }
         this.setState({
             [event.target.name]: targetPage
@@ -87,7 +86,7 @@ class ServicesList extends Component {
             if (this.state.search) {
                 this.searchData(firstPage);
             } else {
-                this.findAllPolicies(firstPage);
+                this.findAllServices(firstPage);
             }
         }
     };
@@ -98,28 +97,28 @@ class ServicesList extends Component {
             if (this.state.search) {
                 this.searchData(this.state.currentPage - prevPage);
             } else {
-                this.findAllPolicies(this.state.currentPage - prevPage);
+                this.findAllServices(this.state.currentPage - prevPage);
             }
         }
     };
 
     lastPage = () => {
-        let condition = Math.ceil(this.state.totalElements / this.state.policiesPerPage);
+        let condition = Math.ceil(this.state.totalElements / this.state.servicesPerPage);
         if (this.state.currentPage < condition) {
             if (this.state.search) {
                 this.searchData(condition);
             } else {
-                this.findAllPolicies(condition);
+                this.findAllServices(condition);
             }
         }
     };
 
     nextPage = () => {
-        if (this.state.currentPage < Math.ceil(this.state.totalElements / this.state.policiesPerPage)) {
+        if (this.state.currentPage < Math.ceil(this.state.totalElements / this.state.servicesPerPage)) {
             if (this.state.search) {
                 this.searchData(this.state.currentPage + 1);
             } else {
-                this.findAllPolicies(this.state.currentPage + 1);
+                this.findAllServices(this.state.currentPage + 1);
             }
         }
     };
@@ -132,12 +131,12 @@ class ServicesList extends Component {
 
     cancelSearch = () => {
         this.setState({ "search": '' });
-        this.findAllPolicies(this.state.currentPage);
+        this.findAllServices(this.state.currentPage);
     };
 
     searchData = (currentPage) => {
         currentPage -= 1;
-        axios.get("http://localhost:8080/api/test/services/search/" + this.state.search + "?page=" + currentPage + "&size=" + this.state.policiesPerPage)
+        axios.get("http://localhost:8080/api/test/services/search/" + this.state.search + "?page=" + currentPage + "&size=" + this.state.servicesPerPage)
             .then(response => response.data)
             .then((data) => {
                 this.setState({
@@ -204,6 +203,7 @@ class ServicesList extends Component {
                                             <table className="table my-3">
                                                 <thead className="">
                                                     <tr>
+                                                        <th>Confirm</th>
                                                         <th>Title</th>
                                                         <th>Type</th>
                                                         <th>Image</th>
@@ -218,11 +218,12 @@ class ServicesList extends Component {
                                                                 <td colSpan="5">No Policies Available.</td>
                                                             </tr> :
                                                             // services.filter(item => item.type === typeParam).map((service) => (
-                                                                services.map((service) => (
+                                                            services.map((service) => (
                                                                 //  {
                                                                 //     if (service.confirm == `Disable`)
                                                                 //     {
                                                                 <tr key={service.id}>
+                                                                    <td>{service.confirm}</td>
                                                                     <td>{service.title}</td>
                                                                     <td>{service.type}</td>
                                                                     <td colSpan="2">
@@ -231,22 +232,22 @@ class ServicesList extends Component {
                                                                     <td>{service.description}</td>
                                                                     <td>
                                                                         {/* <ButtonGroup>
-                                                                            <Link to={"admin/editpolicy/"+service.id} className="btn btn-sm btn-outline-primary"><BsPencilSquare /></Link>{' '}
+                                                                            <Link to={"admin/editpolicy/" + service.id} className="btn btn-sm btn-outline-primary"><BsPencilSquare /></Link>{' '}
                                                                             <Button size="sm" variant="outline-danger" onClick={this.deleteService.bind(this, service.id)}><BsFillTrashFill /></Button>
                                                                         </ButtonGroup> */}
                                                                         <ul className="list-inline m-0">
                                                                             <li className="list-inline-item">
                                                                                 <Link to={"/admin/editservices/" + service.id} className="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i className="fa fa-edit"></i></Link>
                                                                             </li>
-                                                                            <li className="list-inline-item">
+                                                                            {/* <li className="list-inline-item">
                                                                                 <button onClick={this.deleteService.bind(this, service.id)} className="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i className="fa fa-trash"></i></button>
-                                                                            </li>
+                                                                            </li> */}
                                                                         </ul>
                                                                     </td>
                                                                 </tr>
-                                                                    // }}
-                                                                )
-                                                                    )
+                                                                // }}
+                                                            )
+                                                            )
                                                     }
                                                 </tbody>
                                             </table>

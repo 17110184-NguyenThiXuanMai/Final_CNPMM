@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import MyToast from '../../../components/Admin/MyToast';
 import axios from 'axios';
-// import { deletePolicy } from '../../../services/index';
 import { Card, Button, InputGroup, FormControl } from 'react-bootstrap';
 import {  BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft } from "react-icons/bs";
 
@@ -32,7 +31,7 @@ class PolicyList extends Component {
 
     findAllPolicies(currentPage) {
         currentPage -= 1;
-        axios.get("http://localhost:8080/api/test/policies?pageNumber=" + currentPage + "&pageSize=" + this.state.policiesPerPage + "&sortBy=title&sortDir=" + this.state.sortDir)
+        axios.get("http://localhost:8080/api/test/policies/admin?pageNumber=" + currentPage + "&pageSize=" + this.state.policiesPerPage + "&sortBy=title&sortDir=" + this.state.sortDir)
             .then(response => response.data)
             .then((data) => {
                 this.setState({
@@ -43,19 +42,6 @@ class PolicyList extends Component {
                 });
             });
     };
-
-    // deletePolicy = (policyId) => {
-    //     this.props.deletePolicy(policyId);
-    //     setTimeout(() => {
-    //         if (this.props.policyObject != null) {
-    //             this.setState({ "show": true });
-    //             setTimeout(() => this.setState({ "show": false }), 3000);
-    //             this.findAllPolicies(this.state.currentPage);
-    //         } else {
-    //             this.setState({ "show": false });
-    //         }
-    //     }, 1000);
-    // };
 
     changePage = event => {
         let targetPage = parseInt(event.target.value);
@@ -175,7 +161,7 @@ class PolicyList extends Component {
                                             <table className="table my-3">
                                                 <thead>
                                                     <tr>
-                                                        {/* <th>Confirm</th> */}
+                                                        <th>Confirm</th>
                                                         <th>Title</th>
                                                         <th>Type</th>
                                                         <th>Description</th>
@@ -189,7 +175,7 @@ class PolicyList extends Component {
                                                             </tr> :
                                                             policies.map((policy) => (
                                                                 <tr key={policy.id}>
-                                                                    {/* <td>{policy.confirm}</td> */}
+                                                                    <td>{policy.confirm}</td>
                                                                     <td>{policy.title}</td>
                                                                     <td>{policy.type}</td>
                                                                     <td>{policy.description}</td>                                                                  
@@ -260,11 +246,5 @@ const mapStateToProps = state => {
         policyObject: state.policy
     };
 };
-
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         deletePolicy: (policyId) => dispatch(deletePolicy(policyId))
-//     };
-// };
 
 export default connect(mapStateToProps)(PolicyList);

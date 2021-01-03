@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { saveService, fetchService, updateService } from '../../../services/index';
-import { Card, Form, Col} from 'react-bootstrap';
+import { Card, Form, Col } from 'react-bootstrap';
 import MyToast from '../MyToast';
 import axios from 'axios';
 import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill, BsFillCaretDownFill } from "react-icons/bs";
@@ -13,29 +13,31 @@ class Services extends Component {
         this.state = this.initialState;
         this.state = {
             types: [],
-            show: false
+            show: false,
+            confirms: []
         };
         this.serviceChange = this.serviceChange.bind(this);
         this.submitService = this.submitService.bind(this);
         this.handleChange = this
-        .handleChange
-        .bind(this);
-      this.handleUpload = this.handleUpload.bind(this);
+            .handleChange
+            .bind(this);
+        this.handleUpload = this.handleUpload.bind(this);
     }
 
     initialState = {
-        id: '', title: '', type: '', description: '', url: ''
+        id: '', title: '', type: '', description: '', url: '', confirm: ''
     };
 
     componentDidMount() {
         const serviceId = + this.props.match.params.id;
         if (serviceId) {
-            this.findById(serviceId);
+            this.findServiceById(serviceId);
         }
         this.findAllTypes();
+        this.findAllConfirms();
     }
 
-    findById = (serviceId) => {
+    findServiceById = (serviceId) => {
         this.props.fetchService(serviceId);
         setTimeout(() => {
             let service = this.props.serviceObject.service;
@@ -46,6 +48,7 @@ class Services extends Component {
                     type: service.type,
                     url: service.url,
                     description: service.description,
+                    confirm: service.confirm
                 });
             }
         }, 1000);
@@ -68,50 +71,19 @@ class Services extends Component {
         this.setState(() => this.initialState);
     };
 
-    // submitService = event => {
-    //     event.preventDefault();
-
-    //     const service = {
-    //         title: this.state.title,  
-    //         type: this.state.type,      
-    //         description: this.state.description,
-    //     };
-
-    //     this.props.saveService(service,()=>{
-    //         // console.log(this.props.savedServiceObject.service); 
-    //         this.props.history.push(`/admin/policy/type=${this.state.type}`);
-    //         if(this.props.savedServiceObject.service != null) {
-    //             console.log('worked');
-    //         this.setState({"show":true, "method":"post"},()=>{
-    //                 this.setState({"show":false});
-    //             });
-    //             // setTimeout(() => this.setState({"show":false}), 3000);
-    //         } else {
-    //             this.setState({"show":false},()=>{
-    //                 // this.props.history.push(`/admin/policy/type=${this.state.type}`)
-    //             });
-
-    //         }
-    //         // this.props.history.push(`/admin/policy/type=${this.state.type}`)
-    //         console.log(this.props.savedServiceObject.service); 
-    //     });
-    //     // this.props.saveService(service);
-    //     // console.log(service); 
-    //     // setTimeout(() => {
-    //     //     if(this.props.savedServiceObject.service != null) {
-    //     //         this.setState({"show":true, "method":"post"});
-    //     //         setTimeout(() => this.setState({"show":false}), 3000);
-    //     //     } else {
-    //     //         this.setState({"show":false});
-    //     //     }
-
-    //     // }, 2000); 
-    //     // this.setState(this.initialState, () => { 
-    //     // this.props.history.push(`/admin/policy/type=${this.state.type}`)})
-    //     this.setState(this.initialState)
-    //     this.props.history.push(`/admin/policy/type=${this.state.type}`)
-    // };
-
+    findAllConfirms = () => {
+        axios.get("http://localhost:8080/api/test/services/confirm")
+        .then(response => response.data)
+        .then((data) => {
+          this.setState({
+            confirms: [{ value: '', display: 'Select Confirm' }]
+              .concat(data.map(confirm => {
+                return { value: confirm, display: confirm }
+              }))
+          });
+        });
+      }
+    
 
     submitService = event => {
         event.preventDefault();
@@ -121,6 +93,7 @@ class Services extends Component {
             type: this.state.type,
             url: this.state.url,
             description: this.state.description,
+            confirm: this.state.confirm,
         };
         this.props.saveService(service);
         setTimeout(() => {
@@ -133,7 +106,7 @@ class Services extends Component {
         }, 2000);
         console.log(this.state.type)
         this.setState(this.initialState);
-       // this.props.history.push(`/admin/policy/type=${this.state.type}`)
+        // this.props.history.push(`/admin/policy/type=${this.state.type}`)
     };
 
     updateService = event => {
@@ -145,6 +118,7 @@ class Services extends Component {
             type: this.state.type,
             url: this.state.url,
             description: this.state.description,
+            confirm: this.state.confirm,
         };
         this.props.updateService(service);
         setTimeout(() => {
@@ -173,44 +147,44 @@ class Services extends Component {
 
     handleChange = e => {
         if (e.target.files[0]) {
-          const image = e.target.files[0];
-          this.setState(() => ({ image }));
+            const image = e.target.files[0];
+            this.setState(() => ({ image }));
         }
-      }
-    
-      handleUpload = (event) => {
+    }
+
+    handleUpload = (event) => {
         event.preventDefault();
-        
+
         const { image } = this.state;
         const uploadTask = storage.ref(`images/${image.name}`).put(image);
         uploadTask.on('state_changed',
-          (snapshot) => {
-            // progrss function ....
-            // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            // this.setState({ progress });
-          },
-          (error) => {
-            // error function ....
-            console.log(error);
-          },
-          () => {
-            // complete function ....
-            storage.ref('images').child(image.name).getDownloadURL().then(url => {
-              console.log(url);
-              this.setState({ url });
-            })
-          });
-      }
+            (snapshot) => {
+                // progrss function ....
+                // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                // this.setState({ progress });
+            },
+            (error) => {
+                // error function ....
+                console.log(error);
+            },
+            () => {
+                // complete function ....
+                storage.ref('images').child(image.name).getDownloadURL().then(url => {
+                    console.log(url);
+                    this.setState({ url });
+                })
+            });
+    }
 
     render() {
-        const { title, description, type, url } = this.state;
+        const { title, description, type, url, confirm } = this.state;
         const style = {
             height: '60vh',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center'
-          };
+        };
         return (
             <div className="home">
                 <div className="slide">
@@ -256,18 +230,31 @@ class Services extends Component {
                                                         className={"form-control"}
                                                         placeholder="Enter Description" />
                                                 </Form.Group>
-                                            </Form.Row> 
-                                            <Form.Row> 
+                                            </Form.Row>
+                                            <Form.Row>
                                                 <Form.Group as={Col} controlId="formGridUrl">
-                                                <div style={style}>
-                                                    {/* <progress value={this.state.progress} max="100" /> */}
-                                                    <br />
-                                                    <input type="file" onChange={this.handleChange} />
-                                                    <button className="btn btn-white" onClick={this.handleUpload}>Upload</button>
-                                                    <br />
-                                                    <img src={this.state.url || 'http://via.placeholder.com/400x300'} alt="Uploaded images" height="300" width="400" />
+                                                    <div style={style}>
+                                                        {/* <progress value={this.state.progress} max="100" /> */}
+                                                        <br />
+                                                        <input type="file" onChange={this.handleChange} />
+                                                        <button className="btn btn-white" onClick={this.handleUpload}>Upload</button>
+                                                        <br />
+                                                        <img src={this.state.url || 'http://via.placeholder.com/400x300'} alt="Uploaded images" height="300" width="400" />
                                                     </div>
                                                 </Form.Group>
+                                                <Form.Group as={Col} controlId="formGridConfirm">
+                                                    <Form.Label>Confirm</Form.Label>
+                                                    <Form.Control required as="select"
+                                                        form onChange={this.serviceChange}
+                                                        name="confirm" value={confirm}
+                                                        className={"form-control"}>
+                                                        {this.state.confirms.map(confirm =>
+                                                        <option key={confirm.value} value={confirm.value}>
+                                                            {confirm.display}
+                                                        </option>
+                                                        )}
+                                                    </Form.Control>
+                                                    </Form.Group>
                                             </Form.Row>
                                         </Card.Body>
                                         <Card.Footer>

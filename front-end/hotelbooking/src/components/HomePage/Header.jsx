@@ -47,7 +47,6 @@ export default class Header extends Component {
                 <div class="header_content d-flex flex-row align-items-center justify-content-start">
                     <div class="logo"><a href="/">The River</a></div>
                     <div class="ml-auto d-flex flex-row align-items-center justify-content-start">
-
                         <nav class="main_nav">
                             <ul class="d-flex flex-row align-items-start justify-content-start">
                                 <li>

@@ -176,10 +176,10 @@ class Booknow extends Component {
                                                 <th>Size</th>
                                                 <td>{this.state.size} sqft.</td>
                                             </tr>
-                                            <tr>
+                                            {/* <tr>
                                                 <th>Price</th>
                                                 <td>$ {this.state.price} </td>
-                                            </tr>
+                                            </tr> */}
                                             <tr>
                                                 <th>Breakfast</th>
                                                 <td>{this.state.breakfast === true ? `Included` : `Not Included`}</td>

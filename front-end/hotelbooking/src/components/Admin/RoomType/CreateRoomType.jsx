@@ -76,7 +76,7 @@ class CreateRoomType extends Component {
   }
 
   findAllConfirms = () => {
-    axios.get("http://localhost:8080/api/test/roomtypes/confirms")
+    axios.get("http://localhost:8080/api/test/roomtypes/confirm")
     .then(response => response.data)
     .then((data) => {
       this.setState({

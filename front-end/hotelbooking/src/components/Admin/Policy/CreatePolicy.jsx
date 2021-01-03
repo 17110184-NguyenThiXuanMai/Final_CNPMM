@@ -1,7 +1,7 @@
 import React, { Component} from 'react'
 import { connect } from 'react-redux';
 import { savePolicy, fetchPolicy, updatePolicy } from '../../../services/index';
-import { Card, Form, Col, InputGroup } from 'react-bootstrap';
+import { Card, Form, Col } from 'react-bootstrap';
 import MyToast from '../../../components/Admin/MyToast';
 import axios from 'axios';
 import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill } from "react-icons/bs";
@@ -12,14 +12,14 @@ class CreatePolicy extends Component {
     this.state = this.initialState;
     this.state = {
       types: [],
-      // confirms: []
+      confirms: []
     };
     this.policyChange = this.policyChange.bind(this);
     this.submitPolicy = this.submitPolicy.bind(this);
   }
 
   initialState = {
-    id: '', type: '', title: '', description: ''
+    id: '', type: '', title: '', description: '', confirm: ''
   };
 
   componentDidMount() {
@@ -28,21 +28,21 @@ class CreatePolicy extends Component {
       this.findPolicyById(policyId);
     }
     this.findAllTypes();
-    // this.findAllConfirms();
+    this.findAllConfirms();
   }
 
-  // findAllConfirms = () => {
-  //   axios.get("http://localhost:8080/api/test/policies/confirms")
-  //   .then(response => response.data)
-  //   .then((data) => {
-  //     this.setState({
-  //       confirms: [{ value: '', display: 'Select Confirm' }]
-  //         .concat(data.map(confirm => {
-  //           return { value: confirm, display: confirm }
-  //         }))
-  //     });
-  //   });
-  // }
+  findAllConfirms = () => {
+    axios.get("http://localhost:8080/api/test/policies/confirm")
+    .then(response => response.data)
+    .then((data) => {
+      this.setState({
+        confirms: [{ value: '', display: 'Select Confirm' }]
+          .concat(data.map(confirm => {
+            return { value: confirm, display: confirm }
+          }))
+      });
+    });
+  }
 
   findAllTypes = () => {
     axios.get("http://localhost:8080/api/test/policies/types")
@@ -67,7 +67,7 @@ class CreatePolicy extends Component {
           title: policy.title,
           type: policy.type,
           description: policy.description,
-          // confirm: policy.confirm
+          confirm: policy.confirm
         });
       }
     }, 1000);
@@ -84,7 +84,7 @@ class CreatePolicy extends Component {
       title: this.state.title,
       type: this.state.type,
       description: this.state.description,
-      // confirm: this.state.confirm,
+      confirm: this.state.confirm
     };
 
     this.props.savePolicy(policy);
@@ -107,7 +107,7 @@ class CreatePolicy extends Component {
       title: this.state.title,
       type: this.state.type,
       description: this.state.description,
-      // confirm: this.state.confirm
+      confirm: this.state.confirm
     };
     this.props.updatePolicy(policy);
     setTimeout(() => {
@@ -175,6 +175,21 @@ class CreatePolicy extends Component {
                     value={description} onChange={this.policyChange}
                     className={"form-control"}
                     placeholder="Enter Description" />
+                </Form.Group>
+              </Form.Row>
+              <Form.Row>
+              <Form.Group as={Col} controlId="formGridConfirm">
+                  <Form.Label>Confirm</Form.Label>
+                  <Form.Control required as="select"
+                    form onChange={this.policyChange}
+                    name="confirm" value={confirm}
+                    className={"form-control"}>
+                    {this.state.confirms.map(confirm =>
+                      <option key={confirm.value} value={confirm.value}>
+                        {confirm.display}
+                      </option>
+                    )}
+                  </Form.Control>
                 </Form.Group>
               </Form.Row>
             </Card.Body>

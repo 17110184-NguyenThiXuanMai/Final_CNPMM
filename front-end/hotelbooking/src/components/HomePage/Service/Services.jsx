@@ -13,7 +13,7 @@ export default class Services extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8080/api/test/services/findallnotpageable")
+        axios.get("http://localhost:8080/api/test/services/findallenableandnotpageable")
             .then((data) => {
                 this.setState({
                     services: data.data
