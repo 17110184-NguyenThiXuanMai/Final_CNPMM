@@ -32,7 +32,7 @@ export default class Sidebar extends Component {
             </Link>
           </li>
           <li>
-            <Link to="/admin/policy/type=Policy">
+            <Link to="/admin/policy">
               <i className="zmdi zmdi-format-list-bulleted"></i>
               <span> Policy </span>
             </Link>

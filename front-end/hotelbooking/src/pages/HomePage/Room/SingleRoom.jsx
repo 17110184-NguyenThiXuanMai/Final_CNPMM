@@ -54,18 +54,19 @@ class SingleRoom extends Component {
                 this.setState({
                     id: roomType.id,
                     titleRoomType: roomType.titleRoomType,
-                    slug: roomType.slug,
+                    bedType: roomType.bedType,
                     type: roomType.type,
+                    price: roomType.price,
                     size: roomType.size,
                     amount: roomType.amount,
-                    capacity: roomType.capacity,
+                    adults: roomType.adults,
+                    children: roomType.children,
                     pets: roomType.pets,
                     breakfast: roomType.breakfast,
                     television: roomType.television,
                     bath: roomType.bath,
                     description: roomType.description,
                     coverPhotoURL: roomType.coverPhotoURL,
-                    price: roomType.price
                 });
             }
         }, 1000);
@@ -134,12 +135,14 @@ class SingleRoom extends Component {
                                                 <li>Size : {this.state.size} SQFT</li>
                                                 <li>Amount: {this.state.amount}</li>
                                                 <li>Type: {this.state.type}</li>
+                                                <li>Bed Type: {this.state.bedType}</li>
                                                 <li>Adults: {this.state.adults}</li>
                                                 <li>Children: {this.state.children}</li>
                                                 <li>{this.state.pets ? "Pets allowed" : "No pets allowed"}</li>
                                                 <li>{this.state.breakfast && "Free breakfast included"}</li>
                                                 <li>{this.state.television ? "Have television" : "Have not television"}</li>
                                                 <li>{this.state.bath ? "Have bath" : "Have not bath"}</li>
+                                                <li>{this.state.description}</li>
                                             </ul>
                                         </div>
                                         <div className="details_long_list">

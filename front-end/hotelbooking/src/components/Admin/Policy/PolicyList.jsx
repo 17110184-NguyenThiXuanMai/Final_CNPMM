@@ -3,18 +3,18 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import MyToast from '../../../components/Admin/MyToast';
 import axios from 'axios';
-import { deleteRoomType } from '../../../services/index';
-import { Card, Image, Button, InputGroup, FormControl } from 'react-bootstrap';
+// import { deletePolicy } from '../../../services/index';
+import { Card, Button, InputGroup, FormControl } from 'react-bootstrap';
 import {  BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft } from "react-icons/bs";
 
-class RoomTypeList extends Component {
+class PolicyList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            roomTypes: [],
+            policies: [],
             search: '',
             currentPage: 1,
-            roomTypesPerPage: 5,
+            policiesPerPage: 5,
             sortDir: "asc",
         };
     }
@@ -22,21 +22,21 @@ class RoomTypeList extends Component {
     sortData = () => {
         setTimeout(() => {
             this.state.sortDir === "asc" ? this.setState({ sortDir: "desc" }) : this.setState({ sortDir: "asc" });
-            this.findAllRoomTypes(this.state.currentPage);
+            this.findAllPolicies(this.state.currentPage);
         }, 500);
     };
 
     componentDidMount() {
-        this.findAllRoomTypes(this.state.currentPage);
+        this.findAllPolicies(this.state.currentPage);
     }
 
-    findAllRoomTypes(currentPage) {
+    findAllPolicies(currentPage) {
         currentPage -= 1;
-        axios.get("http://localhost:8080/api/test/roomtypes/admin?pageNumber=" + currentPage + "&pageSize=" + this.state.roomTypesPerPage + "&sortBy=price&sortDir=" + this.state.sortDir)
+        axios.get("http://localhost:8080/api/test/policies?pageNumber=" + currentPage + "&pageSize=" + this.state.policiesPerPage + "&sortBy=title&sortDir=" + this.state.sortDir)
             .then(response => response.data)
             .then((data) => {
                 this.setState({
-                    roomTypes: data.content,
+                    policies: data.content,
                     totalPages: data.totalPages,
                     totalElements: data.totalElements,
                     currentPage: data.number + 1
@@ -44,25 +44,25 @@ class RoomTypeList extends Component {
             });
     };
 
-    deleteRoomType = (roomTypeId) => {
-        this.props.deleteRoomType(roomTypeId);
-        setTimeout(() => {
-            if (this.props.roomTypeObject != null) {
-                this.setState({ "show": true });
-                setTimeout(() => this.setState({ "show": false }), 3000);
-                this.findAllRoomTypes(this.state.currentPage);
-            } else {
-                this.setState({ "show": false });
-            }
-        }, 1000);
-    };
+    // deletePolicy = (policyId) => {
+    //     this.props.deletePolicy(policyId);
+    //     setTimeout(() => {
+    //         if (this.props.policyObject != null) {
+    //             this.setState({ "show": true });
+    //             setTimeout(() => this.setState({ "show": false }), 3000);
+    //             this.findAllPolicies(this.state.currentPage);
+    //         } else {
+    //             this.setState({ "show": false });
+    //         }
+    //     }, 1000);
+    // };
 
     changePage = event => {
         let targetPage = parseInt(event.target.value);
         if (this.state.search) {
             this.searchData(targetPage);
         } else {
-            this.findAllRoomTypes(targetPage);
+            this.findAllPolicies(targetPage);
         }
         this.setState({
             [event.target.name]: targetPage
@@ -75,7 +75,7 @@ class RoomTypeList extends Component {
             if (this.state.search) {
                 this.searchData(firstPage);
             } else {
-                this.findAllRoomTypes(firstPage);
+                this.findAllPolicies(firstPage);
             }
         }
     };
@@ -86,28 +86,28 @@ class RoomTypeList extends Component {
             if (this.state.search) {
                 this.searchData(this.state.currentPage - prevPage);
             } else {
-                this.findAllRoomTypes(this.state.currentPage - prevPage);
+                this.findAllPolicies(this.state.currentPage - prevPage);
             }
         }
     };
 
     lastPage = () => {
-        let condition = Math.ceil(this.state.totalElements / this.state.roomTypesPerPage);
+        let condition = Math.ceil(this.state.totalElements / this.state.policiesPerPage);
         if (this.state.currentPage < condition) {
             if (this.state.search) {
                 this.searchData(condition);
             } else {
-                this.findAllRoomTypes(condition);
+                this.findAllPolicies(condition);
             }
         }
     };
 
     nextPage = () => {
-        if (this.state.currentPage < Math.ceil(this.state.totalElements / this.state.roomTypesPerPage)) {
+        if (this.state.currentPage < Math.ceil(this.state.totalElements / this.state.policiesPerPage)) {
             if (this.state.search) {
                 this.searchData(this.state.currentPage + 1);
             } else {
-                this.findAllRoomTypes(this.state.currentPage + 1);
+                this.findAllPolicies(this.state.currentPage + 1);
             }
         }
     };
@@ -120,16 +120,16 @@ class RoomTypeList extends Component {
 
     cancelSearch = () => {
         this.setState({ "search": '' });
-        this.findAllRoomTypes(this.state.currentPage);
+        this.findAllPolicies(this.state.currentPage);
     };
 
     searchData = (currentPage) => {
         currentPage -= 1;
-        axios.get("http://localhost:8080/api/test/roomtypes/search/" + this.state.search + "?page=" + currentPage + "&size=" + this.state.roomTypesPerPage)
+        axios.get("http://localhost:8080/api/test/policies/search/" + this.state.search + "?page=" + currentPage + "&size=" + this.state.policiesPerPage)
             .then(response => response.data)
             .then((data) => {
                 this.setState({
-                    roomTypes: data.content,
+                    policies: data.content,
                     totalPages: data.totalPages,
                     totalElements: data.totalElements,
                     currentPage: data.number + 1
@@ -138,27 +138,12 @@ class RoomTypeList extends Component {
     };
 
     add = () => {
-        return this.props.history.push("/admin/addroomtypes");
-    };
-
-    checkRoomType = (Code) => {
-        if (Code === true) {
-            return (
-                <td className="text-center">
-                    <div>True</div>
-                </td>
-            );
-        } else {
-            return (
-                <td className="text-center">
-                    <div>False</div>
-                </td>
-            );
-        }
+        return this.props.history.push("/admin/addpolicy");
     };
 
     render() {
-        const { roomTypes, currentPage, totalPages, search } = this.state;
+        const { policies, currentPage, totalPages, search } = this.state;
+
         return (
             <div>
                 <div className="home">
@@ -166,12 +151,12 @@ class RoomTypeList extends Component {
                         <div className="row">
                             <div className="col">
                                 <div style={{ "display": this.state.show ? "block" : "none" }}>
-                                    <MyToast show={this.state.show} message={"RoomType Deleted Successfully."} type={"danger"} />
+                                    <MyToast show={this.state.show} message={"Policy Deleted Successfully."} type={"danger"} />
                                 </div>
                                 <div className="card">
                                     <div className="card-body">
                                         <div className="card-row">
-                                            <div className="card-title">Room Type Manage</div>
+                                            <div className="card-title">Policy Manage</div>
                                             <div className="form-inline ml-auto mb-3">
                                                 <div className="md-form my-0">
                                                     <FormControl placeholder="Search" name="search" value={search}
@@ -190,55 +175,31 @@ class RoomTypeList extends Component {
                                             <table className="table my-3">
                                                 <thead>
                                                     <tr>
-                                                        <th>Confirm</th>
-                                                        <th>Title Room Type</th>
-                                                        <th>Bed Type</th>
+                                                        {/* <th>Confirm</th> */}
+                                                        <th>Title</th>
                                                         <th>Type</th>
-                                                        <th onClick={this.sortData}>Price <div className={this.state.sortDir === "asc" ? "arrow arrow-up" : "arrow arrow-down"}> </div></th>
-                                                        <th>Size</th>
-                                                        <th>Amount</th>
-                                                        <th>Adults</th>
-                                                        <th>Children</th>
                                                         <th>Description</th>
-                                                        <th>Pets</th>
-                                                        <th>Breakfast</th>
-                                                        <th>Television</th>
-                                                        <th>Bath</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        roomTypes.length === 0 ?
+                                                        policies.length === 0 ?
                                                             <tr align="center">
-                                                                <td colSpan="12">No RoomTypes Available.</td>
+                                                                <td colSpan="3">No Policy Available.</td>
                                                             </tr> :
-                                                            roomTypes.map((roomType) => (
-                                                                
-                                                                <tr key={roomType.id}>
-                                                                    <td>{roomType.confirm}</td>
-                                                                    <td>
-                                                                        <Image src={roomType.coverPhotoURL} rounded width="100" height="100" /> &nbsp; {roomType.titleRoomType}
-                                                                    </td>
-                                                                    <td>{roomType.bedType}</td>
-                                                                    <td>{roomType.type}</td>
-                                                                    <td>{roomType.price}</td>
-                                                                    <td>{roomType.size}</td>
-                                                                    <td>{roomType.amount}</td>
-                                                                    <td>{roomType.adults}</td>
-                                                                    <td>{roomType.children}</td>
-                                                                    <td>{roomType.description}</td>
-                                                                    <td> {this.checkRoomType(roomType.pets)}</td>
-                                                                    <td> {this.checkRoomType(roomType.breakfast)}</td>
-                                                                    <td> {this.checkRoomType(roomType.television)}</td>
-                                                                    <td> {this.checkRoomType(roomType.bath)}</td>
-                                                                    
+                                                            policies.map((policy) => (
+                                                                <tr key={policy.id}>
+                                                                    {/* <td>{policy.confirm}</td> */}
+                                                                    <td>{policy.title}</td>
+                                                                    <td>{policy.type}</td>
+                                                                    <td>{policy.description}</td>                                                                  
                                                                     <td>
                                                                         <ul className="list-inline m-0">
                                                                             <li className="list-inline-item">
-                                                                                <Link to={"/admin/editroomtype/" + roomType.id} className="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i className="fa fa-edit"></i></Link>
+                                                                                <Link to={"/admin/editpolicy/" + policy.id} className="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i className="fa fa-edit"></i></Link>
                                                                             </li>
                                                                             {/* <li className="list-inline-item">
-                                                                                <button onClick={this.deleteRoomType.bind(this, roomType.id)} className="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i className="fa fa-trash"></i></button>
+                                                                                <button onClick={this.deletePolicy.bind(this, policy.id)} className="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i className="fa fa-trash"></i></button>
                                                                             </li> */}
                                                                         </ul>
                                                                     </td>
@@ -248,7 +209,7 @@ class RoomTypeList extends Component {
                                                 </tbody>
                                             </table>
                                             <div className="card-body">
-                                                {roomTypes.length > 0 ?
+                                                {policies.length > 0 ?
                                                     <Card.Footer>
                                                         <div style={{ "float": "left" }}>
                                                             Showing Page {currentPage} of {totalPages}
@@ -296,14 +257,14 @@ class RoomTypeList extends Component {
 
 const mapStateToProps = state => {
     return {
-        roomTypeObject: state.roomType
+        policyObject: state.policy
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        deleteRoomType: (roomTypeId) => dispatch(deleteRoomType(roomTypeId))
-    };
-};
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         deletePolicy: (policyId) => dispatch(deletePolicy(policyId))
+//     };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RoomTypeList);
+export default connect(mapStateToProps)(PolicyList);

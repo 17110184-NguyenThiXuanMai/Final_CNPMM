@@ -12,6 +12,8 @@ import ServicesList from '../components/Admin/Services/ServicesList';
 import Dashboard from '../components/Admin/Dashboard';
 import AdminListImage from '../pages/Admin/AdminListImage'
 import BookingList from '../components/Admin/Booking/BookingList'
+import PolicyList from '../components/Admin/Policy/PolicyList';
+import CreatePolicy from '../components/Admin/Policy/CreatePolicy';
 
 export default class adminDefaultLayout extends Component {
 
@@ -36,6 +38,8 @@ export default class adminDefaultLayout extends Component {
                   <Route path="/admin/editservices/:id" exact component={Services} />
                   <Route path="/admin/photo" exact component={AdminListImage} />
                   <Route path="/admin/booking" exact component={BookingList} />
+                  <Route path="/admin/policy" exact component={PolicyList} />
+                  <Route path="/admin/addpolicy" exact component={CreatePolicy} />
                 </Provider>
               </Switch>
             </div>

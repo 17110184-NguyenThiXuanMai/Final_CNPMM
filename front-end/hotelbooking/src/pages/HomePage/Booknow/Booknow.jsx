@@ -5,7 +5,8 @@ import DatePicker from "react-datepicker";
 import { Link } from 'react-router-dom'
 import { RoomContext } from '../../../context'
 import axios from 'axios';
-import "../../../css/main.css"
+import "../../../css/main.css";
+import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 
 class Booknow extends Component {
@@ -19,15 +20,13 @@ class Booknow extends Component {
             selectedRoomType: [],
         };
         this.roomTypeChange = this.roomTypeChange.bind(this);
-        this.onBookingSubmit = this.onBookingSubmit.bind(this);
-        this.onCustomerSubmit = this.onCustomerSubmit.bind(this);
         this.handleChangeEnd = this.handleChangeEnd.bind(this);
         this.handleChangeStart = this.handleChangeStart.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     initialState = {
-        id: '', titleRoomType: '', slug: '', type: '', size: '', amount: '', capacity: '', pets: '', breakfast: '', bath: '', television: '', description: '', coverPhotoURL: '', price: ''
+        id: '', titleRoomType: '', bedType: '', type: '', size: '', amount: '', adults: '', children: '', pets: '', breakfast: '', bath: '', television: '', description: '', coverPhotoURL: '', price: ''
     };
     static contextType = RoomContext;
 
@@ -71,18 +70,19 @@ class Booknow extends Component {
                 this.setState({
                     id: roomType.id,
                     titleRoomType: roomType.titleRoomType,
-                    slug: roomType.slug,
+                    bedType: roomType.bedType,
                     type: roomType.type,
+                    price: roomType.price,
                     size: roomType.size,
                     amount: roomType.amount,
-                    capacity: roomType.capacity,
+                    adults: roomType.adults,
+                    children: roomType.children,
                     pets: roomType.pets,
                     breakfast: roomType.breakfast,
                     bath: roomType.bath,
                     television: roomType.television,
                     description: roomType.description,
                     coverPhotoURL: roomType.coverPhotoURL,
-                    price: roomType.price
                 });
             }
         }, 1000);
@@ -104,7 +104,6 @@ class Booknow extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-
         const payload = {
             "customer": `http://localhost:8080/api/test/customers/${this.state.customerId}`,
             "startDate": this.state.startDate,
@@ -113,13 +112,18 @@ class Booknow extends Component {
         };
 
         this.props.onSubmit(payload)
-
         this.setState({
             customerId: '',
             selectedRoomType: [],
             startDate: '',
             endDate: ''
         })
+    }
+
+    calculateDaysLeft(startDate, endDate) {
+        if (!moment.isMoment(startDate)) startDate = moment(startDate);
+        if (!moment.isMoment(endDate)) endDate = moment(endDate);
+        return endDate.diff(startDate, "days");
     }
 
     render() {
@@ -136,18 +140,9 @@ class Booknow extends Component {
                             </div>
                             <div className="row">
                                 <div className="col">
-                                    {/* <CustomerForm
-                                        onSubmit={this.onCustomerSubmit}
-                                    /> */}
                                 </div>
                                 <div className="col">
-                                    {/* <BookingForm
-                                        onSubmit={this.onBookingSubmit}
-                                        customers={this.state.customers} /> */}
                                 </div>
-                                {/* <CustomerList customers={this.state.customers}
-                                    onCustomerSelected={this.selectCustomer.bind(this)} />
-                                <CustomerDetail customer={this.state.selectedCustomer} /> */}
                             </div>
                             <div className="row" onSubmit={this.handleSubmit}>
                                 <div className="col-md-6 col-12 my-auto">
@@ -162,24 +157,28 @@ class Booknow extends Component {
                                                 <td>{this.state.titleRoomType}</td>
                                             </tr>
                                             <tr>
-                                                <th>Capacity</th>
-                                                {/* <td>{capacity}</td> */}
-                                                <td>{this.state.capacity}</td>
+                                                <th>Type</th>
+                                                <td>{this.state.type}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Bed Type</th>
+                                                <td>{this.state.bedType}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Adults</th>
+                                                <td>{this.state.adults} </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Children</th>
+                                                <td>{this.state.children} </td>
                                             </tr>
                                             <tr>
                                                 <th>Size</th>
-                                                {/* <td>{size} sqft.</td> */}
                                                 <td>{this.state.size} sqft.</td>
                                             </tr>
                                             <tr>
-                                                <th>Amount</th>
-                                                {/* <td>{size} sqft.</td> */}
-                                                <td>{this.state.amount} </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Amount</th>
-                                                {/* <td>{size} sqft.</td> */}
-                                                <td>{this.state.amount} </td>
+                                                <th>Price</th>
+                                                <td>$ {this.state.price} </td>
                                             </tr>
                                             <tr>
                                                 <th>Breakfast</th>

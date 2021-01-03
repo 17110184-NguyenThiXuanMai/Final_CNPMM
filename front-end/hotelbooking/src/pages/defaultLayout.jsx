@@ -16,6 +16,7 @@ import AboutUs from '../pages/HomePage/About/AboutUs'
 import PrivateRoute from '../PrivateRoute';
 import ListImage from './HomePage/LitsImage'
 import Booknow from './HomePage/Booknow/Booknow'
+import Policy from '../components/HomePage/Policy/Policy'
 
 export default class DefaultLayout extends Component {
     render() {
@@ -38,6 +39,7 @@ export default class DefaultLayout extends Component {
                                 <Route exact path="/contact/" component={Contact} />
                                 <Route exact path="/about/" component={AboutUs} />
                                 <Route exact path="/photo" component={ListImage} />
+                                <Route exact path="/policy" component={Policy} />
                             </Provider>
                         </div>
                     </body>

@@ -74,14 +74,14 @@ export default class AdminProfile extends Component {
                                 {currentUser.username} Profile
                         </div>
                             </div>
-                            <div className="row">
+                            {/* <div className="row">
                               <div className="col-md-4">
                                 <label>Id:</label>
                               </div>
                               <div className="col-md-8">
                                 {currentUser.id}
                               </div>
-                            </div>
+                            </div> */}
                             <div className="row">
                               <div className="col-md-4">
                                 <label>Email:</label>

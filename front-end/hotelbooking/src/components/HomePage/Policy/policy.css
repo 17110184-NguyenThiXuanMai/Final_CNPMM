@@ -1,0 +1,56 @@
+.basic-content .text-align-center {
+    text-align: center!important;
+}
+.booking2 {
+    background: #ffffff;
+    padding-top: 90px;
+    padding-bottom: 90px;
+}
+b, strong {
+    font-weight: 700;
+    color: #a6192e;
+}
+.basic-content h1, .basic-content h2 {
+    font-size: 36px;
+    font-size: 2.25rem;
+    letter-spacing: 2.16px;
+    letter-spacing: .135rem;
+    line-height: 34.56px;
+    line-height: 2.16rem;
+}
+
+.basic-content h1, .basic-content h2 {
+    font-size: 36px;
+    font-size: 2.25rem;
+    letter-spacing: 2.16px;
+    letter-spacing: .135rem;
+    line-height: 43.2px;
+    line-height: 2.7rem;
+    margin: 20px 0;
+}
+.basic-content h1, .basic-content h2 {
+    text-transform: uppercase;
+    color: #a6192e; 
+    font-family: Trivia,serif;
+    font-weight: 400;
+    font-size: 30px;
+    font-size: 1.875rem;
+    letter-spacing: 1.8px;
+    letter-spacing: .1125rem;
+    line-height: 36px;
+    line-height: 2.25rem;
+    margin: 16px 0;
+    font-size: 30px;
+    letter-spacing: 1.8px;
+    line-height: 39.6px;
+    line-height: 2.475rem;
+}
+.text-align-center {
+    text-align: center;
+    color: #a6192e;
+}
+
+h1 {
+    font-size: 3em;
+    margin: .67em 0;
+}
