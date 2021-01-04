@@ -4,6 +4,7 @@ import { Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './room.css'
+import NumberFormat from 'react-number-format';
 
 class Room extends Component {
     constructor(props) {
@@ -32,7 +33,7 @@ class Room extends Component {
                             <div className="single-package-item">
                                 <Image src={roomType.coverPhotoURL} alt="single room" height="300" width="400" />
                                 <div className="single-package-item-txt">
-                                    <h3>{roomType.titleRoomType} <span className="pull-right">${roomType.price}</span></h3>
+                                    <h3>{roomType.titleRoomType} <span className="pull-right"><NumberFormat thousandSeparator={true} displayType={'text'} prefix={'$'} value={roomType.price}/></span></h3>
                                     <div className="packages-para">
                                         <p>
                                             <span>

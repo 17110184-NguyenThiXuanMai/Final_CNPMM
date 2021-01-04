@@ -7,6 +7,7 @@ import StyledHero from '../../../components/HomePage/Room/StyledHero';
 import axios from 'axios';
 import './booking.css';
 import { Image } from 'react-bootstrap';
+import NumberFormat from 'react-number-format';
 
 class SingleRoom extends Component {
     constructor(props) {
@@ -97,7 +98,7 @@ class SingleRoom extends Component {
                         </div>
                     </div>
                 </div>
-                {/* <div className="booking">
+                <div className="booking">
                     <div className="container">
                         <div className="row">
                             {roomTypes.map((roomType) => (
@@ -109,7 +110,7 @@ class SingleRoom extends Component {
                             ))}
                         </div>
                     </div>
-                </div> */}
+                </div>
                 <div className="booking">
                     <div className="details">
                         <div className="container">
@@ -124,7 +125,7 @@ class SingleRoom extends Component {
                                         <div className="details_title">{this.state.titleRoomType} Room</div>
                                         <div className="details_list">
                                             <ul>
-                                                <li>Price : ${this.state.price}</li>
+                                                <li>Price : <NumberFormat thousandSeparator={true} prefix={'$'} displayType={'text'} value={this.state.price}/></li>
                                                 <li>Size : {this.state.size} SQFT</li>
                                                 <li>Amount: {this.state.amount}</li>
                                                 <li>Type: {this.state.type}</li>

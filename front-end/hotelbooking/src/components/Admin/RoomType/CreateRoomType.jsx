@@ -237,7 +237,7 @@ class CreateRoomType extends Component {
   };
 
   render() {
-    const { titleRoomType, bedType, type, size, amount, adults, children, description, coverPhotoURL, price, confirm } = this.state;
+    const { titleRoomType, bedType, type, size, amount, adults, children, description,  price, confirm } = this.state;
     const style = {
       height: '60vh',
       display: 'flex',

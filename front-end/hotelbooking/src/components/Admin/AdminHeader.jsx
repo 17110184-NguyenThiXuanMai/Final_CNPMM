@@ -55,8 +55,8 @@ export default class AdminHeader extends Component {
 
           <ul className="navbar-nav align-items-center right-nav-link">
             <li className="nav-item dropdown-lg">
-              <Link className="nav-link dropdown-toggle dropdown-toggle-nocaret waves-effect" data-toggle="dropdown" to="/">
-                <BsFillHouseFill /></Link>
+              <a className="nav-link dropdown-toggle dropdown-toggle-nocaret waves-effect" href={"/"}>
+                <BsFillHouseFill /></a>
             </li>
             <li className="nav-item dropdown-lg">
               <a className="nav-link dropdown-toggle dropdown-toggle-nocaret waves-effect" data-toggle="dropdown" href="javascript:void();">

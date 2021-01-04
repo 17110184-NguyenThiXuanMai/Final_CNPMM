@@ -6,6 +6,7 @@ import axios from 'axios';
 import { deleteRoomType } from '../../../services/index';
 import { Card, Image, Button, InputGroup, FormControl } from 'react-bootstrap';
 import {  BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft } from "react-icons/bs";
+import NumberFormat from 'react-number-format';
 
 class RoomTypeList extends Component {
     constructor(props) {
@@ -220,9 +221,9 @@ class RoomTypeList extends Component {
                                                                         <Image src={roomType.coverPhotoURL} rounded width="100" height="100" /> &nbsp; {roomType.titleRoomType}
                                                                     </td>
                                                                     <td>{roomType.bedType}</td>
-                                                                    <td>{roomType.type}</td>
-                                                                    <td>{roomType.price}</td>
-                                                                    <td>{roomType.size}</td>
+                                                                    <td>{roomType.type}</td>                                            
+                                                                    {/* <td>{roomType.price}</td> */}
+                                                                    <td><NumberFormat thousandSeparator={true} prefix={'$'} displayType={'text'} value={roomType.price}/></td>
                                                                     <td>{roomType.amount}</td>
                                                                     <td>{roomType.adults}</td>
                                                                     <td>{roomType.children}</td>

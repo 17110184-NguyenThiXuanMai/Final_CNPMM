@@ -8,6 +8,7 @@ import axios from 'axios';
 import "../../../css/main.css";
 import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
+import NumberFormat from 'react-number-format';
 
 class Booknow extends Component {
     constructor(props) {
@@ -221,8 +222,8 @@ class Booknow extends Component {
                                     <mark>Please make sure Checkin time is from 9 am to 12 pm</mark>
                                 </div>
                                 <div className="col-md-6 col-12">
-                                    <h6 className="font-weight-bold">Price per day : <span className="badge badge-info">Rs {this.state.price}</span></h6>
-                                    <h6 className="font-weight-bold">Total Price to be paid : <span className="text-primary">Rs {daysLeft * (this.state.price)}</span></h6>
+                                    <h6 className="font-weight-bold">Price per day : <span className="badge badge-info"><NumberFormat thousandSeparator={true} prefix={'$'} displayType={'text'} value={this.state.price}/></span></h6>
+                                    <h6 className="font-weight-bold">Total Price to be paid : <span className="text-primary"><NumberFormat thousandSeparator={true} prefix={'$'} displayType={'text'} value={daysLeft * (this.state.price)}/></span></h6>
                                 </div>
                             </div>
 

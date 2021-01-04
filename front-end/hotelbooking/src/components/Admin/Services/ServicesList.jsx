@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { deleteService } from '../../../services/index';
-import { Card, Button, InputGroup, ButtonGroup, FormControl, Image } from 'react-bootstrap';
+import { Card, Button, InputGroup, FormControl, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import MyToast from '../MyToast';
 import axios from 'axios';
-import { BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft, BsPencilSquare } from "react-icons/bs";
+import { BsChevronBarRight, BsChevronRight, BsChevronLeft, BsChevronBarLeft } from "react-icons/bs";
 
 class ServicesList extends Component {
     constructor(props) {

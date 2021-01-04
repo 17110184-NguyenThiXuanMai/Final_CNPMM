@@ -4,7 +4,7 @@ import { saveService, fetchService, updateService } from '../../../services/inde
 import { Card, Form, Col } from 'react-bootstrap';
 import MyToast from '../MyToast';
 import axios from 'axios';
-import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill, BsFillCaretDownFill } from "react-icons/bs";
+import { BsListUl, BsArrowCounterclockwise, BsPlusSquareFill } from "react-icons/bs";
 import { storage } from "../../../firebase/firebase";
 
 class Services extends Component {
@@ -177,7 +177,7 @@ class Services extends Component {
     }
 
     render() {
-        const { title, description, type, url, confirm } = this.state;
+        const { title, description, type, confirm } = this.state;
         const style = {
             height: '60vh',
             display: 'flex',
